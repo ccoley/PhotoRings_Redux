@@ -1,0 +1,25 @@
+body {
+    background-color: #a5a5a5;
+}
+
+table {
+    background-color: #f0f8ff;
+    border: 1px solid #000000;
+    min-width: 500px;
+    font-family: monospace;
+}
+
+th {
+    background-color: #eec251;
+    padding: 2px 5px;
+    border: 1px solid #000000;
+}
+
+td {
+    padding: 2px 5px;
+    border: 1px solid #000000;
+}
+
+tr:nth-child(2n+1) {
+    background-color: #d3d3d3;
+}
