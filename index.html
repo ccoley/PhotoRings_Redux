@@ -31,9 +31,9 @@
                     </li>
                 </ul>
                 <ul class="nav navbar-nav navbar-right">
-                    <li><a href="#" style="padding-right: 0;">Username</a></li>
+                    <li><a href="#" id="username">Username</a></li>
                     <li class="dropdown">
-                        <a href="" style="padding-left: 5px;" class="dropdown-toggle glyphicon glyphicon-chevron-down" data-toggle="dropdown"></a>
+                        <a href="" id="username-dropdown" class="dropdown-toggle glyphicon glyphicon-chevron-down" data-toggle="dropdown"></a>
                         <ul class="dropdown-menu">
                             <li><a href="#">Settings</a></li>
                             <li><a href="#">Log Out</a></li>
@@ -43,12 +43,38 @@
             </div> <!-- /.navbar-collapse -->
         </nav>
 
-        <div class="container" style="border: 1px dashed #804519;">
-            <div class="text-center">
-                <p>See our leet skillz</p>
-                <img src="images/soccer_fail.gif">
+        <div class="page-wrap">
+            <div class="container">
+                <div class="row jumbotron">
+                    <img class="img-rounded img-responsive col-md-6" src="images/ASU_Campus.jpg">
+                    <div class="col-md-6">
+                        <p>Appalachian State University Aerial View</p>
+                    </div>
+                </div>
+                <div class="row jumbotron">
+                    <img class="img-rounded img-responsive col-md-6" src="images/soccer_fail.gif">
+                    <div class="col-md-6">
+                        <p>Leet soccer skillz</p>
+                    </div>
+                </div>
+                <div class="row jumbotron">
+                    <img class="img-rounded img-responsive col-md-6" src="images/brave_frontier_desktop.jpg">
+                    <div class="col-md-6">
+                        <p>Scouting a New Frontier</p>
+                    </div>
+                </div>
+                <div class="row jumbotron">
+                    <img class="img-rounded img-responsive col-md-6" src="images/DeltaNorth_1.jpg">
+                    <div class="col-md-6">
+                        <p>Spotted an enemy amongst some airplane relics from prior centuries</p>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <footer class="site-footer container text-center white-text">
+            <p>&copy; 2013 PhotoRings, Inc.</p>
+        </footer>
 
         <!-- Get them scripts. Load them last to improve page loading speeds. -->
         <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>

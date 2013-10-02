@@ -1,5 +1,42 @@
 body {
-    padding-top: 50px;
-    background-image: url("../images/bg-purple_stripes.jpg");
-    background-repeat: repeat-x;
+    padding-top: 70px;
+    background: url("../images/bg-purple_stripes.jpg") repeat-x;
 }
+
+.white-text {
+    color: white;
+}
+
+#username {
+    padding-right: 0;
+}
+
+#username-dropdown {
+    padding-left: 4px;
+    padding-right: 5px;
+    margin-left: 1px;
+    margin-right: 10px;
+}
+
+/* BEGIN css for sticky footer */
+html, body {
+    height: 100%;
+}
+
+.page-wrap {
+    min-height: 100%;
+    height: auto !important;
+    /*height: 100%;*/
+    margin-bottom: -1.5em;
+}
+
+.page-wrap:after {
+    content: "";
+    display: block;
+}
+
+.site-footer, .page-wrap:after {
+    /* .push must be the same height as footer */
+    height: 1.5em;
+}
+/* END css for sticky footer */
