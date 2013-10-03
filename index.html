@@ -2,6 +2,7 @@
 <html>
     <head>
         <title>PhotoRings Reduxxxxxxxxxxxxxxxxxxxxxxxx</title>
+        <link rel="shortcut icon" href="images/photorings_favicon.ico"/>
         <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
         <link rel="stylesheet" href="css/main.css">
     </head>
@@ -45,30 +46,24 @@
 
         <div class="page-wrap">
             <div class="container">
-                <div class="row jumbotron">
-                    <img class="img-rounded img-responsive col-md-6" src="images/ASU_Campus.jpg">
-                    <div class="col-md-6">
-                        <p>Appalachian State University Aerial View</p>
-                    </div>
-                </div>
-                <div class="row jumbotron">
-                    <img class="img-rounded img-responsive col-md-6" src="images/soccer_fail.gif">
-                    <div class="col-md-6">
-                        <p>Leet soccer skillz</p>
-                    </div>
-                </div>
-                <div class="row jumbotron">
-                    <img class="img-rounded img-responsive col-md-6" src="images/brave_frontier_desktop.jpg">
-                    <div class="col-md-6">
-                        <p>Scouting a New Frontier</p>
-                    </div>
-                </div>
-                <div class="row jumbotron">
-                    <img class="img-rounded img-responsive col-md-6" src="images/DeltaNorth_1.jpg">
-                    <div class="col-md-6">
-                        <p>Spotted an enemy amongst some airplane relics from prior centuries</p>
-                    </div>
-                </div>
+                <script type="text/javascript">
+                    var imgPath = "images/test_images/";
+                    var images = ["ASU_Campus.jpg", "brave_frontier_desktop.jpg", "cassini_derelict_desktop.jpg", "DeltaNorth_1.jpg", "soccer_fail.gif"];
+
+                    // Write a post for each image
+                    images.forEach(function(image) {
+                        document.write(""
+                            +   "<div class=\"row panel post-box\">"
+                            +       "<div class=\"col-md-7 post-img\">"
+                            +           "<img class=\"img-rounded img-responsive\" src=\"" + imgPath + image + "\">"
+                            +       "</div>"
+                            +       "<div class=\"col-md-5 post-text\">"
+                            +           "<p>Scouting a New Frontier</p>"
+                            +       "</div>"
+                            +   "</div>"
+                        );
+                    })
+                </script>
             </div>
         </div>
 

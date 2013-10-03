@@ -1,6 +1,10 @@
+/* Dark Purple:     #603588 */
+/* Light Purple:    #849CC3 */
+
+
 body {
     padding-top: 70px;
-    background: url("../images/bg-purple_stripes.jpg") repeat-x;
+    background: url("../images/purple-diagonal-stripes.jpg") repeat-x;
 }
 
 .white-text {
@@ -15,8 +19,19 @@ body {
     padding-left: 4px;
     padding-right: 5px;
     margin-left: 1px;
-    margin-right: 10px;
+    margin-right: 15px;
 }
+
+.post-box {
+    margin-bottom: 20px;
+    padding: 15px 0;
+}
+
+.post-img img {
+    /*display: block;*/
+    margin: auto;
+}
+
 
 /* BEGIN css for sticky footer */
 html, body {
