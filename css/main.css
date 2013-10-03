@@ -32,6 +32,11 @@ body {
     margin: auto;
 }
 
+.navbar-logo {
+    height: 32px;
+    margin: -15px 3px -15px -6px;
+}
+
 /* Put a fancy line at the bottom of every dropdown menu */
 .dropdown-menu:after {
     content: "";
