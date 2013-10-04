@@ -1,0 +1,48 @@
+/* Dark Purple:     #371E4D */
+/* Medium Purple:   #603588 */
+/* Light Purple:    #894CC3 */
+/* Light Orange:    #FFB000 */
+
+body {
+    padding-top: 70px;
+    background: url("../images/5.png") repeat;
+}
+
+.white-text {
+    color: white;
+}
+
+.post-box {
+    margin-bottom: 20px;
+    padding: 15px 0;
+    background-color: #F8F8F8;
+    /*border-color: #E7E7E7;*/
+}
+
+.post-img img {
+    /*display: block;*/
+    margin: auto;
+}
+
+/* BEGIN css for sticky footer */
+html, body {
+    height: 100%;
+}
+
+.page-wrap {
+    min-height: 100%;
+    height: auto !important;
+    /*height: 100%;*/
+    margin-bottom: -1.5em;
+}
+
+.page-wrap:after {
+    content: "";
+    display: block;
+}
+
+.site-footer, .page-wrap:after {
+    /* .push must be the same height as footer */
+    height: 1.5em;
+}
+/* END css for sticky footer */

@@ -1,0 +1,42 @@
+body {
+    padding-top: 54px;  /* Push down page content at least 54px, so navbar doesn't cover anything */
+}
+
+.navbar-logo {
+    height: 32px;
+    margin: -6px 9px -6px -6px;
+}
+
+/* Put a fancy line at the bottom of every dropdown menu */
+.dropdown-menu:after {
+    content: "";
+    display: block;
+    height: 3px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    background-size: 100%;
+}
+
+/* Put a fancy line at the bottom of the navbar */
+nav:after {
+    content: "";
+    display: block;
+    height: 3px;
+    width: 100%;
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    background-size: 100%;
+}
+
+/* Fancy Purple -> Orange Gradient */
+.dropdown-menu:after, nav:after {
+    background-color: #ffb000;  /* fallback/image non-cover color */
+    background-image: -webkit-gradient(linear, 0% 0%, 100% 0%, from(#371E4D), to(#ffb000)); /* Safari 4+, Chrome 1-9 */
+    background-image: -webkit-linear-gradient(left, #371E4D, #ffb000);  /* Safari 5.1+, Mobile Safari, Chrome 10+ */
+    background-image:    -moz-linear-gradient(left, #371E4D, #ffb000);  /* Firefox 3.6+ */
+    background-image:     -ms-linear-gradient(left, #371E4D, #ffb000);  /* IE 10+ */
+    background-image:      -o-linear-gradient(left, #371E4D, #ffb000);  /* Opera 11.10+ */
+}

@@ -1,0 +1,13 @@
+                         HOW TO USE NAVBAR ON YOUR PAGE
+================================================================================
+External Dependencies:
+ * Bootstrap CSS
+ * Bootstrap JS
+
+To use navbar:
+ * Make sure you have included the external dependencies in your page.
+ * Make sure your page is a .php file. (e.x. index.php vs index.html)
+ * Make sure navbar.html and navbar.css are in the same directory.
+ * Include the navbar.html file in your main .php file, above the main content.
+
+Look at home.php for an example of how to use the NAVBAR.
