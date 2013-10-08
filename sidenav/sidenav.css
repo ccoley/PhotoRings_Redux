@@ -18,9 +18,10 @@ body {
 .site-footer {
     padding: 0;
     margin: 0;
-    position: relative;
-    bottom: 3em;
+    position: absolute;
+    bottom: 0.5em;
     height: 2em;
+    width: 100%;
     z-index: 1001;
 }
 
@@ -41,11 +42,11 @@ body {
     }
 
     .sidebar {
-        width: 200px;
+        width: 180px;
     }
 
     .main {
-        margin-left: 200px;
+        margin-left: 180px;
     }
 
     .sidenav {
