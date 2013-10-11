@@ -4,7 +4,7 @@
 /* Light Orange:    #FFB000 */
 
 body {
-    padding-top: 70px;
+    /*padding-top: 70px;*/
     background: url("../images/5.png") repeat;
 }
 
@@ -25,24 +25,24 @@ body {
 }
 
 /* BEGIN css for sticky footer */
-html, body {
-    height: 100%;
-}
-
-.page-wrap {
-    min-height: 100%;
-    height: auto !important;
+/*html, body {*/
     /*height: 100%;*/
-    margin-bottom: -1.5em;
-}
+/*}*/
 
-.page-wrap:after {
-    content: "";
-    display: block;
-}
+/*.page-wrap {*/
+    /*min-height: 100%;*/
+    /*height: auto !important;*/
+    /*height: 100%;*/
+    /*margin-bottom: -1.5em;*/
+/*}*/
 
-.site-footer, .page-wrap:after {
+/*.page-wrap:after {*/
+    /*content: "";*/
+    /*display: block;*/
+/*}*/
+
+/*.site-footer, .page-wrap:after {*/
     /* .push must be the same height as footer */
-    height: 1.5em;
-}
+    /*height: 1.5em;*/
+/*}*/
 /* END css for sticky footer */
