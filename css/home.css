@@ -5,7 +5,7 @@
 
 body {
     /*padding-top: 70px;*/
-    background: url("../images/5.png") repeat;
+    background: url("../images/0.png") repeat;
 }
 
 .white-text {
@@ -13,7 +13,7 @@ body {
 }
 
 .post-box {
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     padding: 15px 0;
     background-color: #F8F8F8;
     /*border-color: #E7E7E7;*/
