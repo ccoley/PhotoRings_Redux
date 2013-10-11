@@ -33,6 +33,8 @@
                         +   "</div>"
                     );
                 })
+
+                document.write("<p class='white-text'>Screen Width: " + window.innerWidth + "</p>");
             </script>
         </div>
     </div>
