@@ -40,6 +40,14 @@ if (!file_exists($imgDir)) {
 echo '</td></tr>';
 
 
+### Libraries Directory
+$libDir = $config->getPathToLibDir();
+echo "<tr><td>Libraries Directory</td><td>$libDir</td><td>";
+if (!file_exists($libDir)) {
+    echo "$libDir does not exist";
+}
+echo '</td></tr>';
+
 
 echo "</table>";
 ?>
