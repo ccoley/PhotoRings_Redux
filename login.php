@@ -29,8 +29,8 @@ if ($_POST['action'] == 'login') {
         </div>
     </div>
 
-    <div class="content container col-md-offset-1 col-md-10">
-        <div class="well">
+    <div class="content container">
+        <div class="well col-md-offset-1 col-md-10">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#login" data-toggle="tab">Login</a></li>
                 <li><a href="#create" data-toggle="tab">Create Account</a></li>
