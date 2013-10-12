@@ -1,0 +1,14 @@
+body {
+    background: url("../images/0.png") repeat;
+}
+
+.page-header {
+    background: #FFF;
+}
+
+.tab-content {
+    padding: 15px;
+    background-color: #FFF;
+    border: 1px solid #DDD;
+    border-top: 0px;
+}
