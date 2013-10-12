@@ -12,7 +12,9 @@ if ($_POST['action'] == 'login') {
         print_r($_POST);
     }
 } else if ($_POST['action'] == 'register') {
-    print_r($_POST);
+//    print_r($_POST);
+    $auth->registerUser($_POST['firstName'], $_POST['lastName'], $_POST['email'], $_POST['password'], $_POST['birthdate']);
+    header("Location: http://photorings.codingallnight.com");
 } else {
     echo '
 <!DOCTYPE html>
@@ -95,7 +97,7 @@ if ($_POST['action'] == 'login') {
                         <div class="form-group">
                             <label class="col-md-2 control-label" for="createDate">Birthdate</label>
                             <div class="col-md-10">
-                                <input class="form-control" type="date" id="createDate" name="birthdate"/>
+                                <input class="form-control" type="date" id="createDate" name="birthdate" placeholder="yyyy-mm-dd"/>
                             </div>
                         </div>
                         <div class="form-group">

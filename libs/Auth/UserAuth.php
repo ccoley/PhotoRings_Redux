@@ -37,6 +37,9 @@ class UserAuth {
         // connect to DB
         $this->dbConnect();
 
+        // Convert the username to lowercase
+        $username = strtolower($username);
+
         // check if encryption is used
         if ($this->encrypt == true) {
             $password = $this->hashPassword($password, $username);
@@ -101,6 +104,9 @@ class UserAuth {
         // connect to DB
         $db = $this->dbConnect();
 
+        // Convert the username to lowercase
+        $username = strtolower($username);
+
         // generate new password
         $newPass = $this->createPassword();
 
@@ -115,6 +121,8 @@ class UserAuth {
         $query = "UPDATE " . $this->user_table . " SET " . $this->pass_column . "='" . $newPassDB . "' WHERE " . $this->user_column . "='" . stripslashes($username) . "'";
         $result = mysqli_query($db, $query) or die(mysqli_error($db));
 
+
+        // Send a notification email
         $to = stripslashes($username);
         // some injection protection
         $illegals = array("%0A","%0D","%0a","%0d","Content-Type","BCC:","Bcc:","bcc:","CC:","Cc:","cc:","TO:","To:","to:");
@@ -166,6 +174,31 @@ class UserAuth {
         return $hash;
     }
 
+    // Create User function
+    function registerUser($fname, $lname, $username, $password, $birthdate) {
+        $this->dbConnect();
+
+        // Convert the username to lowercase
+        $username = strtolower($username);
+
+        // Convert the fname and lname to title case
+        $fname = ucwords($fname);
+        $lname = ucwords($lname);
+
+        // check if encryption is used
+        if ($this->encrypt == true) {
+            $password = $this->hashPassword($password, $username);
+        }
+
+        // execute the insert
+        $result = $this->qry("INSERT INTO " . $this->user_table . "(email,password,fname,lname,birthdate) VALUES ('?','?','?','?','?');",
+                $username, $password, $fname, $lname, $birthdate);
+
+        //TODO: Error checking on $result
+
+        return ($result != "Error");
+    }
+
     // prevent SQL injection
     // TODO: fix this method so that it uses prepared statements
     function qry($query) {
@@ -195,46 +228,9 @@ class UserAuth {
         if ($result) {
             return $result;
         } else {
-//            $error = "Error";
+            $result = "Error";
             return $result;
         }
-    }
-
-    // Login form
-    function loginForm($formName, $formClass, $formAction) {
-        // connect to DB
-//        $this->dbConnect();
-
-        echo '
-<form name="'.$formName.'" method="post" id="'.$formName.'" class="'.$formClass.'" enctype="application/x-www-form-urlencoded" action="'.$formAction.'">
-    <div>
-        <label for="username">Email</label><input name="username" id="username" type="text">
-    </div>
-    <div>
-        <label for="password">Password</label><input name="password" id="password" type="password">
-    </div>
-    <input name="action" id="action" value="login" type="hidden">
-    <div>
-        <input name="submit" id="submit" value="Login" type="submit">
-    </div>
-</form>';
-    }
-
-    // Password Reset form
-    function resetForm($formName, $formClass, $formAction) {
-        // connect to DB
-//        $this->dbConnect();
-
-        echo '
-<form name="'.$formName.'" method="post" id="'.$formName.'" class="'.$formClass.'" enctype="application/x-www-form-urlencoded" action="'.$formAction.'">
-    <div>
-        <label for="username">Email</label><input name="username" id="username" type="text">
-    </div>
-    <input name="action" id="action" value="resetLogin" type="hidden">
-    <div>
-        <input name="submit" id="submit" value="Reset Password" type="submit">
-    </div>
-</form>';
     }
 }
 ?>
