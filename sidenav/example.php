@@ -4,7 +4,7 @@
     <title>SideNav Example</title>
     <!-- SideNav needs Bootstrap CSS, so include it if you haven't already -->
     <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
-    <!-- Include SideNav's stylesheet -->
+    <!-- Include SideNav's stylesheet after the Bootstrap stylesheet -->
     <link rel="stylesheet" href="sidenav.css">
 </head>
 <body>
@@ -13,8 +13,9 @@
         <? include 'sidenav.html' ?>
     </div> <!-- END sidebar -->
 
-    <!-- This div contains the main age content and must be of class 'main' -->
+    <!-- This div contains the main page content and must be of class 'main' -->
     <div class="main">
+        <!-- This content could be anything, as long as it is inside the 'main' div -->
         <div class="row">
             <div class="container">
                 <div class="jumbotron">
