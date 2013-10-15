@@ -42,6 +42,10 @@
     margin: -7px 9px -7px -6px;
 }
 
+.nav>li>a {
+    color: #FFB000;
+}
+
 /* When screen width drops below 768px, these CSS rules turn on */
 @media (max-width: 767px) {
     .sidebar {

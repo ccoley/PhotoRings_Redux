@@ -35,3 +35,7 @@ body {
     /*display: block;*/
     margin: auto;
 }
+
+.nav>li>a:hover {
+    background-color: #603588;
+}
