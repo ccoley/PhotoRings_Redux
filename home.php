@@ -1,3 +1,13 @@
+<?php
+require_once 'libs/Auth/UserAuth.php';
+$auth = new UserAuth();
+// If the user is not logged in, redirect them to the splash page
+if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
+//    print_r($_SESSION);
+    header("Location: http://photorings.codingallnight.com");
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
