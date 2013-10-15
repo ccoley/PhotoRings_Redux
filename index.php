@@ -9,8 +9,8 @@ $auth = new UserAuth();
 //print_r($_SESSION);
 
 if ($auth->isLoggedIn($_SESSION['loggedIn'])) {
-    header('Location: http://frame.codingallnight.com:8080/photorings/home.php');
+    header('Location: home.php');
 } else {
-    header('Location: http://frame.codingallnight.com:8080/photorings/login.php');
+    header('Location: login.php');
 }
 ?>

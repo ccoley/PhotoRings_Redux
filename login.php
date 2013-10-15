@@ -7,14 +7,14 @@ if ($_POST['action'] == 'login') {
     if ($auth->login($_POST['email'], $_POST['password']) == true) {
 //        print_r($_SESSION);
 //        echo "<br><br>";
-        header('Location: http://photorings.codingallnight.com');
+        header('Location: home.php');
     } else {
         print_r($_POST);
     }
 } else if ($_POST['action'] == 'register') {
 //    print_r($_POST);
     $auth->registerUser($_POST['firstName'], $_POST['lastName'], $_POST['email'], $_POST['password'], $_POST['birthdate']);
-    header("Location: http://photorings.codingallnight.com");
+    header("Location: index.php");
 } else {
     echo '
 <!DOCTYPE html>
@@ -62,7 +62,7 @@ if ($_POST['action'] == 'login') {
                         </div>
                         <div class="form-group">
                             <div class="col-md-offset-2 col-md-10">
-                                <button type="submit" class="btn btn-default">Sign in</button>
+                                <button type="submit" class="btn btn-warning">Sign in</button>
                             </div>
                         </div>
                     </form>
@@ -102,7 +102,7 @@ if ($_POST['action'] == 'login') {
                         </div>
                         <div class="form-group">
                             <div class="col-md-offset-2 col-md-10">
-                                <button type="submit" class="btn btn-default">Create Account</button>
+                                <button type="submit" class="btn btn-warning">Create Account</button>
                             </div>
                         </div>
                     </form>

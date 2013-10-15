@@ -12,3 +12,7 @@ body {
     border: 1px solid #DDD;
     border-top: 0;
 }
+
+.btn-primary {
+    background-color: #FFB000;
+}
