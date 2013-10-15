@@ -24,10 +24,10 @@
                 images.forEach(function(image) {
                     document.write(""
                         +   "<div class=\"row panel post-box\">"
-                        +       "<div class=\"col-md-7 post-img\">"
+                        +       "<div class=\"col-md-6 post-img\">"
                         +           "<img class=\"img-rounded img-responsive\" src=\"" + imgPath + image + "\">"
                         +       "</div>"
-                        +       "<div class=\"col-md-5 post-text\">"
+                        +       "<div class=\"col-md-6 post-text\">"
                         +           "<p>Some witty quip about how awesome my photo is.</p>"
                         +       "</div>"
                         +   "</div>"
