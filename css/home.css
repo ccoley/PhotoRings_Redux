@@ -16,15 +16,6 @@ body {
     max-width: 970px;
 }
 
-.accordion-collapse>li {
-    border-left: 3px #FFB000 solid;
-}
-
-.nav .caret {
-    border-top-color: #FFB000;
-    border-bottom-color: #FFB000;
-}
-
 .post-box {
     margin-bottom: 15px;
     padding: 15px 0;
@@ -34,8 +25,4 @@ body {
 .post-img img {
     /*display: block;*/
     margin: auto;
-}
-
-.nav>li>a:hover {
-    background-color: #603588;
 }
