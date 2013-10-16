@@ -20,7 +20,7 @@ if ($_POST['action'] == 'login') {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PhotoRings Redux</title>
+    <title>Login - PhotoRings</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/login.css">
 </head>

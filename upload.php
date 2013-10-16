@@ -10,7 +10,7 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PhotoRings Reduxxxxxxxxxxxxxxxxxxxxxxxx</title>
+    <title>Upload - PhotoRings</title>
     <link rel="shortcut icon" href="images/photorings_favicon.ico"/>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="sidenav/sidenav.css">
