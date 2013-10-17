@@ -1,4 +1,4 @@
-HOW TO USE NAVBAR ON YOUR PAGE
+How to use NAVBAR on your page
 ==============================
 External Dependencies:
 - Bootstrap CSS
