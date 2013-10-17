@@ -1,3 +1,3 @@
 ### Current Contributors: ###
-* Chris Coley <chris@codingallnight.com>
-* Timothy Miller <tm78775@appstate.edu>
+- [Chris Coley] (http://github.com/ccoley)
+- [Timothy Miller] (http://github.com/timothy78775)
