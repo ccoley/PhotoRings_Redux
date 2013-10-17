@@ -1,4 +1,4 @@
-HOW TO USE SIDENAV ON YOUR PAGE
+How to use SIDENAV on your page
 ===============================
 External Dependencies:
 - Bootstrap CSS
