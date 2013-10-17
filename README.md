@@ -1,5 +1,5 @@
 Welcome to PhotoRings!
-=====================
+======================
 
 [PhotoRings] (http://photorings.codingallnight.com)
 
