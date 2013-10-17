@@ -10,3 +10,7 @@ body {
 .btn-submit {
     font-weight: bold;
 }
+
+.container {
+    max-width: 970px;
+}

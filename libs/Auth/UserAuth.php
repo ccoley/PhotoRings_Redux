@@ -1,7 +1,4 @@
 <?php
-// This code is an adaptation of the code here:
-// http://www.emirplicanic.com/php/simple-phpmysql-authentication-class
-
 // For security reasons, don't display any errors or warnings. Comment out in DEV.
 //error_reporting(0);
 
@@ -27,7 +24,7 @@ class UserAuth {
 
     // Connect to the database
     function dbConnect() {
-        $connection = mysqli_connect($this->hostname_auth, $this->username_auth, $this->password_auth) or die('Unable to connect to the database');
+        $connection = mysqli_connect($this->hostname_auth, $this->username_auth, $this->password_auth) or die('Unable to connect to the database server');
         mysqli_select_db($connection, $this->database_auth) or die('Unable to select database');
         return $connection;
     }
@@ -59,6 +56,7 @@ class UserAuth {
                 // register sessions
                 // you can add additional sessions here if needed
                 $_SESSION['loggedIn'] = $row[$this->pass_column];
+                $_SESSION['username'] = $row[$this->user_column];
                 // privileges session is optional. Use it if you have different user privilege levels
                 $_SESSION['privilege'] = $row[$this->user_level];
                 return true;
@@ -97,6 +95,31 @@ class UserAuth {
 //            echo 'User is NOT valid';
             return false;
         }
+    }
+
+    // change password
+    function changePassword($username, $oldPassword, $newPassword) {
+        // connect to DB
+        $dsn = "mysql:host=".$this->hostname_auth.";dbname=".$this->database_auth.";charset=utf8";
+        $db = new PDO($dsn,$this->username_auth,$this->password_auth, array(PDO::ATTR_EMULATE_PREPARES => false,PDO::ATTR_ERRMODE => PDO::ERRMODE_SILENT));
+
+        // Convert the username to lowercase
+        $username = strtolower($username);
+
+        // check if encryption is used
+        if ($this->encrypt == true) {
+            $oldPassword = $this->hashPassword($oldPassword, $username);
+            $newPassword = $this->hashPassword($newPassword, $username);
+        }
+
+        $stmt = $db->prepare("UPDATE ".$this->user_table." SET ".$this->pass_column."=? WHERE ".$this->user_column."=? AND ".$this->pass_column."=?");
+        if ($stmt != false) {
+            if ($stmt->execute(array($newPassword, $username, $oldPassword))) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     // reset password
