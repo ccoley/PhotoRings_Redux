@@ -1,4 +1,6 @@
 <?php
+require_once 'libs/Database/PhotoRings_DB.php';
+
 // For security reasons, don't display any errors or warnings. Comment out in DEV.
 //error_reporting(0);
 
@@ -23,6 +25,7 @@ class UserAuth {
     var $hashSalt = 'z+9Ee>;nST0YtP^)I0%6<EeZ!tQ|/*eaB7!?Q%HwwCNSgUL;DRHb]9|MkM{c+N@8';
 
     // Connect to the database
+    // TODO: Get rid of this after fixing the other methods
     function dbConnect() {
         $connection = mysqli_connect($this->hostname_auth, $this->username_auth, $this->password_auth) or die('Unable to connect to the database server');
         mysqli_select_db($connection, $this->database_auth) or die('Unable to select database');
@@ -30,6 +33,7 @@ class UserAuth {
     }
 
     // Login function
+    // TODO: fix this method so that it uses the PhotoRings_DB class to access the DB
     function login($username, $password) {
         // connect to DB
         $this->dbConnect();
@@ -77,6 +81,7 @@ class UserAuth {
 
     // check if logged in
     // $loginCode = $_SESSION['loggedIn']
+    // TODO: fix this method so that it uses the PhotoRings_DB class to access the DB
     function isLoggedIn($loginCode) {
         // connect to DB
 //        $this->dbConnect();
@@ -97,11 +102,21 @@ class UserAuth {
         }
     }
 
-    // change password
+    /**
+     * Change the password for the account with the specified username.
+     *
+     * @param string $username The username we are changing the password for.
+     * @param string $oldPassword The old password.
+     * @param string $newPassword The new password.
+     * @return bool TRUE if password change was successful, FALSE otherwise.
+     */
     function changePassword($username, $oldPassword, $newPassword) {
-        // connect to DB
-        $dsn = "mysql:host=".$this->hostname_auth.";dbname=".$this->database_auth.";charset=utf8";
-        $db = new PDO($dsn,$this->username_auth,$this->password_auth, array(PDO::ATTR_EMULATE_PREPARES => false,PDO::ATTR_ERRMODE => PDO::ERRMODE_SILENT));
+        // Connect to the DB
+        try {
+            $db = new PDO_DB();
+        } catch (PDOException $e) {
+            return false;
+        }
 
         // Convert the username to lowercase
         $username = strtolower($username);
@@ -112,9 +127,10 @@ class UserAuth {
             $newPassword = $this->hashPassword($newPassword, $username);
         }
 
-        $stmt = $db->prepare("UPDATE ".$this->user_table." SET ".$this->pass_column."=? WHERE ".$this->user_column."=? AND ".$this->pass_column."=?");
-        if ($stmt != false) {
-            if ($stmt->execute(array($newPassword, $username, $oldPassword))) {
+        // Change the password
+        $query = $db->prepare("UPDATE ".$this->user_table." SET ".$this->pass_column."=? WHERE ".$this->user_column."=? AND ".$this->pass_column."=?");
+        if ($query != false) {
+            if ($query->execute(array($newPassword, $username, $oldPassword))) {
                 return true;
             }
         }
@@ -123,6 +139,7 @@ class UserAuth {
     }
 
     // reset password
+    // TODO: fix this method so that it uses the PhotoRings_DB class to access the DB
     function passwordReset($username) {
         // connect to DB
         $db = $this->dbConnect();
@@ -198,6 +215,7 @@ class UserAuth {
     }
 
     // Create User function
+    // TODO: fix this method so that it uses the PhotoRings_DB class to access the DB
     function registerUser($fname, $lname, $username, $password, $birthdate) {
         $this->dbConnect();
 
@@ -223,7 +241,7 @@ class UserAuth {
     }
 
     // prevent SQL injection
-    // TODO: fix this method so that it uses prepared statements
+    // TODO: fix this method so that it uses the PhotoRings_DB class to access the DB
     function qry($query) {
         $db = $this->dbConnect();
         $args = func_get_args();

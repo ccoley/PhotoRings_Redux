@@ -11,6 +11,9 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
 if ($_POST['action'] == 'changePassword') {
     if ($auth->changePassword($_SESSION['username'], $_POST['oldPassword'], $_POST['newPassword'])) {
         //TODO alert the user that their password was successfully changed
+    } else {
+        //TODO alert the user that their password was not changed
+//        echo 'Password not changed';
     }
 }
 ?>
