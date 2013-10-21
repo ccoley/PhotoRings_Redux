@@ -5,12 +5,12 @@
     left: 0;
     z-index: 1000;
     height: 100%;
-    width: 180px;
+    width: 200px;
 }
 
 .main {
     padding: 15px 15px 0;
-    margin-left: 180px;
+    margin-left: 200px;
 }
 
 .accordion-collapse {
