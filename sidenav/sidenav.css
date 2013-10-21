@@ -36,6 +36,10 @@
     border-radius: 0;
 }
 
+.navbar-header {
+    float: none;
+}
+
 .navbar-logo {
     width: 32px;
     height: 32px;
