@@ -5,11 +5,12 @@ $auth = new UserAuth();
 
 if ($_POST['action'] == 'login') {
     if ($auth->login($_POST['email'], $_POST['password']) == true) {
+//        echo '<br>Session:<br>';
 //        print_r($_SESSION);
-//        echo "<br><br>";
         header('Location: home.php');
     } else {
-        print_r($_POST);
+//        echo '<br>';
+//        print_r($_POST);
     }
 } else if ($_POST['action'] == 'register') {
 //    print_r($_POST);
@@ -20,7 +21,7 @@ if ($_POST['action'] == 'login') {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PhotoRings Redux</title>
+    <title>Login - PhotoRings</title>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="css/login.css">
 </head>

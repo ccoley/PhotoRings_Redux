@@ -3,7 +3,6 @@ require_once 'libs/Auth/UserAuth.php';
 $auth = new UserAuth();
 // If the user is not logged in, redirect them to the splash page
 if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
-//    print_r($_SESSION);
     header("Location: login.php");
 }
 ?>
@@ -11,7 +10,7 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>PhotoRings Reduxxxxxxxxxxxxxxxxxxxxxxxx</title>
+    <title>PhotoRings</title>
     <link rel="shortcut icon" href="images/photorings_favicon.ico"/>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="sidenav/sidenav.css">

@@ -5,12 +5,12 @@
     left: 0;
     z-index: 1000;
     height: 100%;
-    width: 180px;
+    width: 200px;
 }
 
 .main {
     padding: 15px 15px 0;
-    margin-left: 180px;
+    margin-left: 200px;
 }
 
 .accordion-collapse {
@@ -36,10 +36,31 @@
     border-radius: 0;
 }
 
+.navbar-header {
+    float: none;
+}
+
 .navbar-logo {
     width: 32px;
     height: 32px;
     margin: -7px 9px -7px -6px;
+}
+
+.accordion-collapse>li {
+    border-left: 3px #FFB000 solid;
+}
+
+.nav>li>a {
+    color: #FFB000;
+}
+
+.nav>li>a:hover {
+    background-color: #603588;
+}
+
+.nav .caret {
+    border-top-color: #FFB000;
+    border-bottom-color: #FFB000;
 }
 
 /* When screen width drops below 768px, these CSS rules turn on */

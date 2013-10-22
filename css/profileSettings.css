@@ -1,0 +1,16 @@
+body {
+    background: url("../images/0.png") repeat;
+    color: #666;
+}
+
+.panel-title {
+    font-size: 18px;
+}
+
+.btn-submit {
+    font-weight: bold;
+}
+
+.container {
+    max-width: 970px;
+}

@@ -1,6 +1,11 @@
 <?php
-// This code is an adaptation of the code here:
-// http://www.emirplicanic.com/php/simple-phpmysql-authentication-class
+/**
+ * Class UserAuth handles all aspects of user authentication for PhotoRings
+ *
+ * @author Chris Coley <chris at codingallnight dot com>
+ */
+
+require_once 'libs/Database/PhotoRings_DB.php';
 
 // For security reasons, don't display any errors or warnings. Comment out in DEV.
 //error_reporting(0);
@@ -8,152 +13,226 @@
 // start session
 session_start();
 
-class UserAuth {
-    // database setup
-    var $hostname_auth = 'localhost';           // Database HOST
-    var $database_auth = 'photo_rings';         // Database NAME
-    var $username_auth = 'pr';                  // Database USERNAME
-    var $password_auth = '5RTQrctz7feTCEcz';    // Database PASSWORD
+//TODO: Figure out how to use secure sessions
 
-    // table fields
+class UserAuth {
+    // Database table fields
     var $user_table = 'users';                  // Users table
     var $user_column = 'email';                 // User login name column
     var $pass_column = 'password';              // User password column
     var $user_level = 'privilege';              // User privileges column
 
-    // password encryption
+    // Password encryption
     var $encrypt = true;    // set to true to use SHA-256 encryption for the password
     var $hashSalt = 'z+9Ee>;nST0YtP^)I0%6<EeZ!tQ|/*eaB7!?Q%HwwCNSgUL;DRHb]9|MkM{c+N@8';
 
-    // Connect to the database
-    function dbConnect() {
-        $connection = mysqli_connect($this->hostname_auth, $this->username_auth, $this->password_auth) or die('Unable to connect to the database');
-        mysqli_select_db($connection, $this->database_auth) or die('Unable to select database');
-        return $connection;
-    }
-
-    // Login function
+    /**
+     * Attempt to log in the user with the provided username and password.
+     *
+     * @param string $username The username of the user who is logging in.
+     * @param string $password The password of the user who is logging in.
+     * @return bool TRUE if login is successful, FALSE otherwise.
+     */
     function login($username, $password) {
-        // connect to DB
-        $this->dbConnect();
+        // Connect to the DB
+        try {
+            $db = new PhotoRings_DB();
+        } catch (PDOException $e) {
+            return false;
+        }
 
         // Convert the username to lowercase
         $username = strtolower($username);
 
-        // check if encryption is used
+        // Check if encryption is used
         if ($this->encrypt == true) {
             $password = $this->hashPassword($password, $username);
         }
 
-//        echo $password;
-//        echo "<br><br>";
+        // Execute the login
+        $query = $db->prepare("SELECT ".$this->user_column.", ".$this->pass_column.", ".$this->user_level." FROM ".$this->user_table." WHERE ".$this->user_column."=? AND ".$this->pass_column."=?");
+        if ($query != false) {
+            if ($query->execute(array($username, $password))) {
+                $result = $query->fetchAll(PDO::FETCH_ASSOC);
+                if ($result != false && count($result) == 1) {
+                    // Only this session variable is required
+                    $_SESSION['loggedIn'] = $result[0][$this->pass_column];
 
-        // execute login via qry function that prevents MySQL injections
-        $result = $this->qry("SELECT * FROM " . $this->user_table . " WHERE " . $this->user_column . "= '?' AND " . $this->pass_column . " = '?';", $username, $password);
-//        print_r($result);
-//        echo "<br><br>";
-        $row = mysqli_fetch_assoc($result);
-        if ($row != "Error") {
-            if ($row[$this->user_column] != "" && $row[$this->pass_column] != "") {
-//                echo 'Made It';
-                // register sessions
-                // you can add additional sessions here if needed
-                $_SESSION['loggedIn'] = $row[$this->pass_column];
-                // privileges session is optional. Use it if you have different user privilege levels
-                $_SESSION['privilege'] = $row[$this->user_level];
-                return true;
-            } else {
-                session_destroy();
-                return false;
+                    // These session variables are only needed for additional functionality
+                    $_SESSION['username'] = $result[0][$this->user_column];
+                    $_SESSION['privilege'] = $result[0][$this->user_level];
+                    return true;
+                }
             }
-        } else {
-            return false;
         }
+        return false;
     }
 
-    // Logout function
+    /**
+     * Log the user out.
+     */
     function logout() {
         session_destroy();
         return;
     }
 
-    // check if logged in
-    // $loginCode = $_SESSION['loggedIn']
+    /**
+     * Check if a user is logged in.
+     *
+     * @param string $loginCode The hashed password of the user, probably obtained from $_SESSION['loggedIn'].
+     * @return bool TRUE if the user is logged in, FALSE otherwise.
+     */
     function isLoggedIn($loginCode) {
-        // connect to DB
-//        $this->dbConnect();
-
-        // execute query
-        $result = $this->qry("SELECT * FROM " . $this->user_table . " WHERE " . $this->pass_column . " = '?';", $loginCode);
-//        echo '<br><br>';
-//        print_r($result);
-        $rownum = mysqli_num_rows($result);
-//        echo '<br><br>';
-//        print_r($rownum);
-        if ($rownum != "Error" && $rownum > 0) {
-//            echo 'User is valid';
-            return true;
-        } else {
-//            echo 'User is NOT valid';
+        // Connect to the DB
+        try {
+            $db = new PhotoRings_DB();
+        } catch (PDOException $e) {
             return false;
         }
+
+        // Execute the query
+        $query = $db->prepare("SELECT * FROM ".$this->user_table." WHERE ".$this->pass_column."=?");
+        if ($query != false) {
+            if ($query->execute(array($loginCode))) {
+                $result = $query->fetchAll(PDO::FETCH_NUM);
+                if ($result != false && count($result) == 1) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
-    // reset password
-    function passwordReset($username) {
-        // connect to DB
-        $db = $this->dbConnect();
+    /**
+     * Change the password for the account with the specified username.
+     *
+     * @param string $username The username we are changing the password for.
+     * @param string $oldPassword The old password.
+     * @param string $newPassword The new password.
+     * @return bool TRUE if password change was successful, FALSE otherwise.
+     */
+    function changePassword($username, $oldPassword, $newPassword) {
+        $changed = false;
+
+        // Connect to the DB
+        try {
+            $db = new PhotoRings_DB();
+        } catch (PDOException $e) {
+            return false;
+        }
 
         // Convert the username to lowercase
         $username = strtolower($username);
 
-        // generate new password
+        // Check if encryption is used
+        if ($this->encrypt == true) {
+            $oldPassword = $this->hashPassword($oldPassword, $username);
+            $newPassword = $this->hashPassword($newPassword, $username);
+        }
+
+        // Change the password
+        $db->beginTransaction();
+        $query = $db->prepare("UPDATE ".$this->user_table." SET ".$this->pass_column."=? WHERE ".$this->user_column."=? AND ".$this->pass_column."=?");
+        if ($query != false) {
+            if ($query->execute(array($newPassword, $username, $oldPassword))) {
+                if ($query->rowCount() == 1) {
+                    $changed = $db->commit();   // TRUE if the password change was saved, FALSE otherwise.
+                }
+            }
+        }
+
+        // If the password was not changed rollback the transaction
+        if ($changed == false) {
+            $db->rollBack();
+        }
+
+        return $changed;
+    }
+
+    /**
+     * Resets a user's password to a randomly generated one and attempts to
+     * send an email informing the user of their new password.
+     *
+     * @param string $username The username of the user whose password is being reset.
+     * @return bool TRUE if the password was successfully reset, FALSE otherwise.
+     */
+    function passwordReset($username) {
+        $reset = false;
+
+        // Connect to the DB
+        try {
+            $db = new PhotoRings_DB();
+        } catch (PDOException $e) {
+            return false;
+        }
+
+        // Convert the username to lowercase
+        $username = strtolower($username);
+
+        // Generate a new password
         $newPass = $this->createPassword();
 
-        // check if encryption is used
+        // Check if encryption is used
         if ($this->encrypt == true) {
             $newPassDB = $this->hashPassword($newPass, $username);
         } else {
             $newPassDB = $newPass;
         }
 
-        // update database with new password
-        $query = "UPDATE " . $this->user_table . " SET " . $this->pass_column . "='" . $newPassDB . "' WHERE " . $this->user_column . "='" . stripslashes($username) . "'";
-        $result = mysqli_query($db, $query) or die(mysqli_error($db));
-
-
-        // Send a notification email
-        $to = stripslashes($username);
-        // some injection protection
-        $illegals = array("%0A","%0D","%0a","%0d","Content-Type","BCC:","Bcc:","bcc:","CC:","Cc:","cc:","TO:","To:","to:");
-        $to = str_replace($illegals, "", $to);
-        $getEmail = explode("@", $to);
-
-        // send only if there is one email
-        if (sizeof($getEmail) > 2) {
-            return false;
-        } else {
-            // send email
-            $from = "photorings@codingallnight.com";
-            $subject = "Password Reset";
-            $msg = "Your new password is: " . $newPass . " ";
-
-            // set mail headers
-            $headers = "MIME-Version: 1.0 \r\n";
-            $headers .= "Content-Type: text/html; \r\n";
-            $headers .= "From: $from \r\n";
-
-            // now to send the email
-            $sent = mail($to, $subject, $msg, $headers);
-            if ($sent) {
-                return true;
-            } else {
-                return false;
+        // Update the DB with the new password
+        $db->beginTransaction();
+        $query = $db->prepare("UPDATE ".$this->user_table." SET ".$this->pass_column."=? WHERE ".$this->user_column."=?");
+        if ($query != false) {
+            if ($query->execute(array($newPassDB, $username))) {
+                if ($query->rowCount() == 1) {
+                    $reset = $db->commit(); // TRUE if commit was successful, FALSE otherwise
+                }
             }
         }
+
+        // If password was reset send a notification email, Else rollback the transaction
+        if ($reset) {
+//            $to = stripslashes($username);
+//            // some injection protection
+//            $illegals = array("%0A", "%0D", "%0a", "%0d", "Content-Type", "BCC:", "Bcc:", "bcc:", "CC:", "Cc:", "cc:", "TO:", "To:", "to:");
+//            $to = str_replace($illegals, "", $to);
+//            $getEmail = explode("@", $to);
+//
+//            // Only send if there is only one email address
+//            if (sizeof($getEmail) > 2) {
+//                return false;
+//            } else {
+//                // send email
+//                $from = "photorings@codingallnight.com";
+//                $subject = "Password Reset";
+//                $msg = "Your new password is: " . $newPass . " ";
+//
+//                // set mail headers
+//                $headers = "MIME-Version: 1.0 \r\n";
+//                $headers .= "Content-Type: text/html; \r\n";
+//                $headers .= "From: $from \r\n";
+//
+//                // now to send the email
+//                $sent = mail($to, $subject, $msg, $headers);
+//                if ($sent) {
+//                    return true;
+//                } else {
+//                    return false;
+//                }
+//            }
+        } else {
+            $db->rollBack();
+        }
+        return $reset;
     }
 
-    // create a random password with 10 alphanumeric characters
+    /**
+     * Creates a pseudo-random 10 character lowercase alphanumeric password.
+     * For the sake of clarity, the password will never contain a 1 (number 1)
+     * or an l (letter L).
+     *
+     * @return string The new password.
+     */
     function createPassword() {
         $chars = "abcdefghijkmnopqrstuvwxyz023456789";  // no 1 or L
         srand((double)microtime() * 1000000);
@@ -167,16 +246,39 @@ class UserAuth {
         return $pass;
     }
 
-    // Encryption function
+    /**
+     * Creates a SHA-256 hash of a double salted password. One salt is the
+     * username for uniqueness, and the other salt is a constant random string.
+     *
+     * @param string $password The password to be hashed.
+     * @param string $username The username of the account that the password belongs to.
+     * @return string The 64 character hash of the password.
+     */
     function hashPassword($password, $username) {
         $password = str_split($password, (strlen($password)/2)+1);
         $hash = hash('sha256', $username . $password[0] . $this->hashSalt . $password[1]);
         return $hash;
     }
 
-    // Create User function
+    /**
+     * Creates a new user in the database.
+     *
+     * @param string $fname The user's first name.
+     * @param string $lname The user's last name.
+     * @param string $username The user's username.
+     * @param string $password The user's password.
+     * @param string $birthdate The user's birthdate in 'YYYY-MM-DD' format.
+     * @return bool TRUE if new user registration was successful, FALSE otherwise.
+     */
     function registerUser($fname, $lname, $username, $password, $birthdate) {
-        $this->dbConnect();
+        $registered = false;
+
+        // Connect to the DB
+        try {
+            $db = new PhotoRings_DB();
+        } catch (PDOException $e) {
+            return false;
+        }
 
         // Convert the username to lowercase
         $username = strtolower($username);
@@ -185,52 +287,27 @@ class UserAuth {
         $fname = ucwords($fname);
         $lname = ucwords($lname);
 
-        // check if encryption is used
+        // Check if encryption is used
         if ($this->encrypt == true) {
             $password = $this->hashPassword($password, $username);
         }
 
-        // execute the insert
-        $result = $this->qry("INSERT INTO " . $this->user_table . "(email,password,fname,lname,birthdate) VALUES ('?','?','?','?','?');",
-                $username, $password, $fname, $lname, $birthdate);
-
-        //TODO: Error checking on $result
-
-        return ($result != "Error");
-    }
-
-    // prevent SQL injection
-    // TODO: fix this method so that it uses prepared statements
-    function qry($query) {
-        $db = $this->dbConnect();
-        $args = func_get_args();
-//        print_r($args);
-//        echo "<br><br>1";
-        $query = array_shift($args);
-//        print_r($query);
-//        echo "<br><br>2";
-//        print_r($args);
-//        echo "<br><br>3";
-        $query = str_replace("?", "%s", $query);
-//        print_r($query);
-//        echo "<br><br>4";
-        //$args = array_map('mysqli_real_escape_string', $args);
-//        print_r($args);
-//        echo "<br><br>5";
-        array_unshift($args, $query);
-//        print_r($args);
-//        echo "<br><br>6";
-        $query = call_user_func_array('sprintf', $args);
-//        print_r($query);
-//        echo "<br><br>7";
-        $result = mysqli_query($db, $query) or die(mysqli_error($db));
-
-        if ($result) {
-            return $result;
-        } else {
-            $result = "Error";
-            return $result;
+        // Execute the insert
+        $db->beginTransaction();
+        $query = $db->prepare("INSERT INTO ".$this->user_table." (email,password,fname,lname,birthdate) VALUES (?,?,?,?,?)");
+        if ($query != false) {
+            if ($query->execute(array($username, $password, $fname, $lname, $birthdate))) {
+                if ($query->rowCount() == 1) {
+                    $registered = $db->commit();    // TRUE if new user was saved, FALSE otherwise.
+                }
+            }
         }
+
+        if ($registered == false) {
+            $db->rollBack();
+        }
+
+        return $registered;
     }
 }
 ?>
