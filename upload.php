@@ -8,7 +8,7 @@ $conf = new Config();
 $imagePath = $conf->getPathToImgDir();
 // If the user is not logged in, redirect them to the splash page
 if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
-    header("Location: index.php");
+    header("Location: http://photorings.codingallnight.com");
 }
 
 
@@ -17,7 +17,7 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Upload - PhotoRings</title>
+    <title>PhotoRings Reduxxxxxxxxxxxxxxxxxxxxxxxx</title>
     <link rel="shortcut icon" href="images/photorings_favicon.ico"/>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="sidenav/sidenav.css">	
