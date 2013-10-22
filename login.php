@@ -5,11 +5,12 @@ $auth = new UserAuth();
 
 if ($_POST['action'] == 'login') {
     if ($auth->login($_POST['email'], $_POST['password']) == true) {
+//        echo '<br>Session:<br>';
 //        print_r($_SESSION);
-//        echo "<br><br>";
         header('Location: home.php');
     } else {
-        print_r($_POST);
+//        echo '<br>';
+//        print_r($_POST);
     }
 } else if ($_POST['action'] == 'register') {
 //    print_r($_POST);

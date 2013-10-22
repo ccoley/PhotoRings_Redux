@@ -4,9 +4,9 @@
  * creation of a PDO dataabse object. AKA: I don't want to put the database
  * access info in every class that needs access to the DB.
  *
- * @author Chris Coley
+ * @author Chris Coley <chris at codingallnight dot com>
  */
-class PDO_DB extends PDO {
+class PhotoRings_DB extends PDO {
     // Database Setup
     private $hostname = 'localhost';
     private $database = 'photo_rings';
