@@ -58,7 +58,7 @@
     background-color: #603588;
 }
 
-.nav .caret {
+.nav .caret, .nav a:hover .caret {
     border-top-color: #FFB000;
     border-bottom-color: #FFB000;
 }
