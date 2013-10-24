@@ -1,7 +1,7 @@
 <?php
 /**
  * Class PDO_DB is a wrapper of the PDO class. It only exists to simplify the
- * creation of a PDO dataabse object. AKA: I don't want to put the database
+ * creation of a PDO database object. AKA: I don't want to put the database
  * access info in every class that needs access to the DB.
  *
  * @author Chris Coley <chris at codingallnight dot com>
