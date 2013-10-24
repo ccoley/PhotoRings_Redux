@@ -16,6 +16,8 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
     <link rel="stylesheet" href="sidenav/sidenav.css">
     <link rel="stylesheet" href="css/dropzone.css">
     <link rel="stylesheet" href="css/upload.css">
+    <script src="js/dropzone.min.js"></script>
+    <script src="js/upload.js"></script>
 </head>
 <body>
     <!-- Side navigation -->
@@ -37,8 +39,6 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
     </div>
 
     <!-- Get them scripts. Load them last to improve page loading speeds. -->
-    <script src="js/dropzone.min.js"></script>
-    <script src="js/upload.js"></script>
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 </body>
