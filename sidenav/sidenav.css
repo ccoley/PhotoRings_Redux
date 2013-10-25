@@ -79,3 +79,22 @@
         height: auto;
     }
 }
+
+/* CSS for the Rings logo */
+.pr-rings-stack {
+    position: relative;
+    width: 14px;
+    height: 14px;
+    font-size: 1em;
+    top: -2px;
+}
+
+.pr-rings-stack.tr {
+    top: -9px;
+    right: -3px;
+}
+
+.pr-rings-stack.bl {
+    top: -33px;
+    left: -1px;
+}
