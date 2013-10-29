@@ -1,11 +1,14 @@
 <?php
 require_once 'libs/Auth/Profile.php';
 require_once 'libs/Database/PhotoRings_DB.php';
+require_once 'libs/Config/Config.php';
 
 if (!empty($_FILES)) {
     $profile = new Profile();
     $profile->buildFromUsername($_POST['username']);
-    $imgDir = $profile->getImageDirectory() . 'original/';
+    //$imgDir = $profile->getImageDirectory() . 'original/';
+    $conf = new Config();
+    $imgDir = $conf->getImgUploadPath() . $profile->getId() . '/original/';
 
     $tempFile = $_FILES['file']['tmp_name'];
     $ext = pathinfo($_FILES['file']['name'], PATHINFO_EXTENSION);

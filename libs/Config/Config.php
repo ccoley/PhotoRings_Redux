@@ -5,6 +5,7 @@
  */
 class Config {
     private $baseDir = "/var/www/photorings";       // Base directory for PhotoRings
+    private $webBase = "/photorings";
     private $imgDir = "/user_images";       // Images directory, sub-directory of baseDir
     private $libDir = "/libs";              // Libraries directory, sub-directory of baseDir
 
@@ -17,8 +18,12 @@ class Config {
         return $this->imgDir;
     }
 
-    public function getPathToImgDir() {
+    public function getImgUploadPath() {
         return $this->baseDir . $this->imgDir . '/';
+    }
+
+    public function getImgWebPath() {
+        return $this->webBase . $this->imgDir . '/';
     }
 
     public function getLibDir() {
