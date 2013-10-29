@@ -64,7 +64,7 @@ $profile->buildFromUsername($_SESSION['username']);
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Birthdate</label>
                                 <div class="col-md-9">
-                                    <p class="form-control-static">February 19, 1990</p>
+                                    <p class="form-control-static"><? echo $profile->getPrettyDob(); ?></p>
                                 </div>
                             </div>
                         </form>

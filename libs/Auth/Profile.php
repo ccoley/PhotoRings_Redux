@@ -25,10 +25,6 @@ class Profile {
         $this->privilege    = $results[0]['privilege'];
     }
 
-    public function getDob() {
-        return $this->dob;
-    }
-
     public function getId() {
         return $this->id;
     }
@@ -37,16 +33,36 @@ class Profile {
         return $this->username;
     }
 
-    public function getFullName() {
-        return $this->firstName . " " . $this->lastName;
-    }
-
     public function getFirstName() {
         return $this->firstName;
     }
 
     public function getLastName() {
         return $this->lastName;
+    }
+
+    public function getFullName() {
+        return $this->firstName . " " . $this->lastName;
+    }
+
+    public function getDob() {
+        return $this->dob;
+    }
+
+    public function getPrettyDob() {
+        return date("F j, Y", strtotime($this->dob));
+    }
+
+    public function getAge() {
+        list($y, $m, $d) = explode('-', $this->dob);
+
+        if (($m = (date('m') - $m)) < 0) {
+            $y++;
+        } elseif ($m == 0 && date('d') - $d < 0) {
+            $y++;
+        }
+
+        return date('Y') - $y;
     }
 
     public function getImageDirectory() {
