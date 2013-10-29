@@ -1,5 +1,7 @@
 <?php
 require_once 'libs/Auth/UserAuth.php';
+require_once 'libs/Auth/Profile.php';
+
 $auth = new UserAuth();
 // If the user is not logged in, redirect them to the splash page
 if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
@@ -16,6 +18,9 @@ if ($_POST['action'] == 'changePassword') {
 //        echo 'Password not changed';
     }
 }
+
+$profile = new Profile();
+$profile->buildFromUsername($_SESSION['username']);
 ?>
 
 <!DOCTYPE html>
@@ -24,6 +29,7 @@ if ($_POST['action'] == 'changePassword') {
     <title>Profile Settings - PhotoRings</title>
     <link rel="shortcut icon" href="images/photorings_favicon.ico"/>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="sidenav/sidenav.css">
     <link rel="stylesheet" href="css/profileSettings.css">
 </head>
@@ -36,6 +42,8 @@ if ($_POST['action'] == 'changePassword') {
     <!-- Main page content -->
     <div class="main">
         <div class="container">
+
+            <!-- Profile Information Box -->
             <div class="row">
                 <div class="panel panel-default">
                     <div class="panel-heading"><h4 class="panel-title">Your Profile Information</h4></div>
@@ -44,26 +52,27 @@ if ($_POST['action'] == 'changePassword') {
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Name</label>
                                 <div class="col-md-9">
-                                    <p class="form-control-static">Chris Coley</p>
+                                    <p class="form-control-static"><? echo $profile->getFullName(); ?></p>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Email</label>
                                 <div class="col-md-9">
-                                    <p class="form-control-static">chris@codingallnight.com</p>
+                                    <p class="form-control-static"><? echo $_SESSION['username']; ?></p>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Birthdate</label>
                                 <div class="col-md-9">
-                                    <p class="form-control-static">February 19, 1990</p>
+                                    <p class="form-control-static"><? echo $profile->getPrettyDob(); ?></p>
                                 </div>
                             </div>
                         </form>
                     </div>
                 </div>
-            </div>
-            <!-- Password Change form -->
+            </div> <!-- END Profile Information Box -->
+
+            <!-- Password Change Form -->
             <div class="row">
                 <div class="panel panel-default">
                     <div class="panel-heading"><h4 class="panel-title">Change Password</h4></div>
@@ -96,7 +105,36 @@ if ($_POST['action'] == 'changePassword') {
                         </form>
                     </div>
                 </div>
-            </div> <!-- END Password Change form -->
+            </div> <!-- END Password Change Form -->
+
+            <!-- Profile Stats Box -->
+            <div class="row">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h4 class="panel-title">Your Profile Stats</h4></div>
+                    <div class="panel-body">
+                        <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Image Directory</label>
+                                <div class="col-md-9">
+                                    <p class="form-control-static"><? echo $profile->getImageDirectory(); ?></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label"># of Uploaded Images</label>
+                                <div class="col-md-9">
+                                    <p class="form-control-static"><? echo $profile->getImageCount(); ?></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Size of Uploaded Images</label>
+                                <div class="col-md-9">
+                                    <p class="form-control-static"><? echo $profile->getDiskFootprint(); ?></p>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div> <!-- END Profile Stats Box -->
         </div>
     </div>
 
