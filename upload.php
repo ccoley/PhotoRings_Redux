@@ -30,6 +30,7 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
     <div class="main">
         <div class="container well">
             <form class="dropzone" action="uploadImage.php" id="uploadDropzone">
+                <input type="hidden" name="username" value="<? echo $_SESSION['username']; ?>">
                 <div class="fallback alert alert-danger">
                     <strong>JavaScript is Disabled!</strong> JavaScript is required to upload images on PhotoRings.
                 </div>
