@@ -25,25 +25,30 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
     <!-- Main page content -->
     <div class="main">
         <div class="container">
-            <script type="text/javascript">
-                var imgPath = "images/test_images/";
-                var images = ["ASU_Campus.jpg", "brave_frontier_desktop.jpg", "cassini_derelict_desktop.jpg", "DeltaNorth_1.jpg", "soccer_fail.gif"];
-
-                // Write a post for each image
-                images.forEach(function(image) {
-                    document.write(""
-                        +   "<div class=\"row panel post-box\">"
-                        +       "<div class=\"col-md-6 post-img\">"
-                        +           "<img class=\"img-rounded img-responsive\" src=\"" + imgPath + image + "\">"
-                        +       "</div>"
-                        +       "<div class=\"col-md-6 post-text\">"
-                        +           "<p>Some witty quip about how awesome my photo is.</p>"
-                        +       "</div>"
-                        +   "</div>"
-                    );
-                });
-//                document.write("<p class='white-text'>Screen Width: " + window.innerWidth + "</p>");
-            </script>
+            <?php
+				require_once 'libs/Database/PhotoRings_DB.php';
+				require_once 'libs/Auth/Profile.php';
+				
+				$profile = new Profile();
+				$profile->buildFromUsername($_SESSION['username']);
+				
+				try {
+					$dbo = new PhotoRings_DB();				
+				}
+				catch (PDOException $e) {
+					return false;
+				}
+				
+				$query = $dbo->prepare("SELECT * FROM images WHERE owner_id = '?'");				
+				
+				if($query != false) {
+					if ($query->execute(array($profile->getId()))) {
+						$result = $query->fetchAll(PDO::FETCH_ASSOC);
+						echo print_r($result); 
+					}
+				}
+				
+			?>
         </div>
     </div>
 
