@@ -4,8 +4,8 @@
  * To see a pretty output of all these settings, and any errors, open ViewConfig.php in your browser.
  */
 class Config {
-    private $baseDir = "/photorings";       // Base directory for PhotoRings
-    private $imgDir = "/images";            // Images directory, sub-directory of baseDir
+    private $baseDir = "/var/www/photorings";       // Base directory for PhotoRings
+    private $imgDir = "/user_images";       // Images directory, sub-directory of baseDir
     private $libDir = "/libs";              // Libraries directory, sub-directory of baseDir
 
 
