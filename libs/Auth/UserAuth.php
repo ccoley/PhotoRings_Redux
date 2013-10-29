@@ -303,7 +303,20 @@ class UserAuth {
             }
         }
 
-        if ($registered == false) {
+        // If the insert was successful, create the user's image directories
+        if ($registered) {
+            require_once 'libs/Auth/Profile.php';
+            $profile = new Profile();
+            $profile->buildFromUsername($username);
+            $base = $profile->getImageDirectory();
+
+            if (!mkdir($base.'original/', 0700, true) || !mkdir($base.'800px/', 0700, true)) {
+                $registered = false;
+            }
+        }
+
+        // If anything failed along the way, rollback the DB transaction
+        if (!$registered) {
             $db->rollBack();
         }
 
