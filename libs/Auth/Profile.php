@@ -67,7 +67,7 @@ class Profile {
 
     public function getImageDirectory() {
         $config = new Config();
-        return ($config->getImgWebPath() . $this->id . "/");
+        return $config->getImgUploadPath() . $this->id . "/";
     }
 
     public function getImageCount() {

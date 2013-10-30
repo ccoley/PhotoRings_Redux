@@ -15,11 +15,20 @@ echo "<table><tr><th>Setting</th><th>Value</th><th>Error(s), if any</th></tr>";
 
 
 ### Apache User ID
-echo "<tr><td>Apache User ID</td><td>" . exec('whoami') . "</td><td></td>";
+echo "<tr><td>Apache User ID</td><td>" . exec('whoami') . "</td><td></td></tr>";
+
+
+### HTTP Host
+$httpHost = $config->getHttpHost();
+echo "<tr><td>HTTP Host</td><td>$httpHost</td><td>";
+if ($httpHost != $_SERVER['HTTP_HOST']) {
+    echo "HTTP Host is misconfigured. This could cause many issues throughout the website.<br>PHP sees it as ".$_SERVER['HTTP_HOST'];
+}
+echo "</td></tr>";
 
 
 ### Base directory
-$baseDir = $config->getBaseDir();
+$baseDir = $config->getBaseRequestUrl();
 echo "<tr><td>Base Directory</td><td>$baseDir</td><td>";
 if (!file_exists($baseDir)) {
     echo "$baseDir does not exist";
@@ -29,22 +38,22 @@ if (!file_exists($baseDir)) {
 echo "</td></tr>";
 
 
+### Libraries Directory
+//$libDir = $config->getPathToLibDir();
+//echo "<tr><td>Libraries Directory</td><td>$libDir</td><td>";
+//if (!file_exists($libDir)) {
+//    echo "$libDir does not exist";
+//}
+//echo '</td></tr>';
+
+
 ### Images Directory
-$imgDir = $config->getPathToImgDir();
-echo "<tr><td>Images Directory</td><td>$imgDir</td><td>";
+$imgDir = $config->getImgUploadPath();
+echo "<tr><td>Image Upload Directory</td><td>$imgDir</td><td>";
 if (!file_exists($imgDir)) {
     echo "$imgDir does not exist";
 } elseif (!is_writable($imgDir)) {
     echo "$imgDir is not writable";
-}
-echo '</td></tr>';
-
-
-### Libraries Directory
-$libDir = $config->getPathToLibDir();
-echo "<tr><td>Libraries Directory</td><td>$libDir</td><td>";
-if (!file_exists($libDir)) {
-    echo "$libDir does not exist";
 }
 echo '</td></tr>';
 
