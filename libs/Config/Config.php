@@ -9,7 +9,7 @@ class Config {
     private $baseRequestUrl = "/photorings";                // The website's base directory
     private $imgDir = "/user_images";                       // User images directory, sub-directory of baseRequestUrl
     private $originalImgDir = "/original";                  // Sub-directory that holds a user's original images
-    private $resizedImgDir = "/800px";                      // Sub-directory that holds a user's resized images
+    private $resizedImgDir = "/resized";                    // Sub-directory that holds a user's resized images
 //    private $libDir = "/libs";                              // Libraries directory, sub-directory of baseRequestUrl
 
 

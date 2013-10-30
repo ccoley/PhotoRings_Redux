@@ -3,5 +3,5 @@ Dropzone.options.uploadDropzone = {
     maxFilesize: 5,         // MB
     thumbnailWidth: 130,    // px
     thumbnailHeight: 130,   // px
-    acceptedFiles: ".jpg,.jpeg,.png,.gif"
+    acceptedFiles: ".jpg,.JPG,.jpeg,.JPEG,.png,.PNG,.gif,.GIF"
 };
