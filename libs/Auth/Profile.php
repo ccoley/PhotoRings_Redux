@@ -80,13 +80,18 @@ class Profile {
     }
 
     public function getDiskFootprint() {
-        $f = $this->getImageDirectory();
-        $io = popen('/usr/bin/du -sh ' . $f, 'r');
-        $size = fgets($io);
-        $size = substr($size, 0, strpos($size, "\t"));
+        $config = new Config();
+
+        $f = $config->getImgUploadPath() . $this->id;
+        $io = popen('/usr/bin/du -sh ' . $f . $config->getOriginalImgDir(), 'r');
+        $fullSize = fgets($io);
+        $fullSize = substr($fullSize, 0, strpos($fullSize, "\t"));
+        $io = popen('/usr/bin/du -sh ' . $f . $config->getResizedImgDir(), 'r');
+        $resized = fgets($io);
+        $resized = substr($resized, 0, strpos($resized, "\t"));
         pclose($io);
 
-        return $size;
+        return array($fullSize, $resized);
     }
 
     public function isAdmin() {
