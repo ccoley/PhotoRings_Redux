@@ -14,8 +14,7 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
     <link rel="shortcut icon" href="images/photorings_favicon.ico"/>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="sidenav/sidenav.css">
-    
-	<link rel="stylesheet" href="css/gallery.css" media="screen" type="text/css" />
+    <!--<link rel="stylesheet" href="css/skeleton.css">-->
 </head>
 <body>
     <!-- Side navigation -->
@@ -41,6 +40,5 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
     <!-- Get them scripts. Load them last to improve page loading speeds. -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-	<script src="js/threesixty.js"></script>
 </body>
 </html>
