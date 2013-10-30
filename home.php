@@ -30,7 +30,6 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
 				require_once 'libs/Database/PhotoRings_DB.php';
 				require_once 'libs/Auth/Profile.php';
 				
-				$result;
 				$profile = new Profile();
 				$profile->buildFromUsername($_SESSION['username']);
 				
@@ -46,19 +45,18 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
 				if($query != false) {
 					
 					if ($query->execute(array($profile->getId()))) {
-						$result = $query->fetchAll(PDO::FETCH_ASSOC);
-					}
-					
-					foreach($result as $row) {
-						echo "<div class=\"row panel post-box\">"
-                        .       "<div class=\"col-md-6 post-img\">"
-                        .           "<img class=\"img-rounded img-responsive\" src=\"" . $profile->getImageDirectory() . "original/" . $row["file_name"] . "\">"
-                        .       "</div>"
-                        .       "<div class=\"col-md-6 post-text\">"
-                        .           "<p>Some witty quip about how awesome my photo is.</p>"
-                        .       "</div>"
-                        .   "</div>";
-					}
+                        $result = $query->fetchAll(PDO::FETCH_ASSOC);
+                        foreach($result as $row) {
+                            echo    "<div class=\"row panel post-box\">"
+                                .       "<div class=\"col-md-6 post-img\">"
+                                .           "<img class=\"img-rounded img-responsive\" src=\"" . $profile->getImageDirectory() . "original/" . $row["file_name"] . "\">"
+                                .       "</div>"
+                                .       "<div class=\"col-md-6 post-text\">"
+                                .           "<p>Some witty quip about how awesome my photo is.</p>"
+                                .       "</div>"
+                                .   "</div>";
+                        }
+                    }
 				}
 				
 			?>
