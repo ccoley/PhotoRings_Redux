@@ -6,3 +6,6 @@
 .idea/
 *.iml
 *.iws
+
+# User Images directory
+user_images/
