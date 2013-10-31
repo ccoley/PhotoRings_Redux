@@ -13,7 +13,8 @@ body {
 }
 
 .container {
-    max-width: 970px;
+    /*max-width: 970px;*/
+    max-width: 1485px;
 }
 
 .post-box {
