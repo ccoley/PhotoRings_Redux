@@ -23,9 +23,22 @@
     margin: 0;
     position: absolute;
     bottom: 0.5em;
-    height: 2em;
+    height: 3em;
     width: 100%;
     z-index: 1001;
+}
+
+.site-footer p {
+    margin: 0;
+}
+
+.site-footer a {
+    color: inherit;
+    text-decoration: none;
+}
+
+.site-footer a:hover {
+    color: #FFB000;
 }
 
 .sidenav {
