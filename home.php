@@ -47,20 +47,20 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
 				if($query != false) {
 					$profileId = $profile->getId();
 					if ($query->execute(array($profileId))) {
-                        $result = $query->fetchAll(PDO::FETCH_ASSOC);
-                        if (count($result) > 0) {
-                            foreach($result as $row) {
-                                $ratio = filesize('user_images/'.$profileId.'/original/'.$row['file_name']) / filesize('user_images/'.$profileId.'/resized/'.$row['file_name']);
+                        $images = $query->fetchAll(PDO::FETCH_ASSOC);
+                        if (count($images) > 0) {
+                            foreach($images as $image) {
+                                $ratio = filesize('user_images/'.$profileId.'/original/'.$image['file_name']) / filesize('user_images/'.$profileId.'/resized/'.$image['file_name']);
                                 echo    "<div class=\"row panel post-box\">"
                                     .       "<div class=\"col-md-6 post-img\">"
                                     .           "<h4 class='text-center'>Original</h4>"
-                                    .           "<img class=\"img-rounded img-responsive\" src=\"" . $config->getImgUrl($profileId, $row['file_name'], true) . "\">"
-                                    .           "<p class='text-center'>".round(filesize('user_images/'.$profileId.'/original/'.$row['file_name'])/1024, 2)."K</p>"
+                                    .           "<img class=\"img-rounded img-responsive\" src=\"" . $config->getImgUrl($profileId, $image['file_name'], true) . "\">"
+                                    .           "<p class='text-center'>".round(filesize('user_images/'.$profileId.'/original/'.$image['file_name'])/1024, 2)."K</p>"
                                     .       "</div>"
                                     .       "<div class=\"col-md-6 post-img\">"
                                     .           "<h4 class='text-center'>Resized @ 90% Quality</h4>"
-                                    .           "<img class=\"img-rounded img-responsive\" src=\"" . $config->getImgUrl($profileId, $row['file_name'], false) . "\">"
-                                    .           "<p class='text-center'>".round(filesize('user_images/'.$profileId.'/resized/'.$row['file_name'])/1024, 2)."K - ".round($ratio, 2)."x smaller</p>"
+                                    .           "<img class=\"img-rounded img-responsive\" src=\"" . $config->getImgUrl($profileId, $image['file_name'], false) . "\">"
+                                    .           "<p class='text-center'>".round(filesize('user_images/'.$profileId.'/resized/'.$image['file_name'])/1024, 2)."K - ".round($ratio, 2)."x smaller</p>"
                                     .       "</div>"
                                     .   "</div>";
                             }
