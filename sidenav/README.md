@@ -1,6 +1,7 @@
 How to use SIDENAV on your page
 ===============================
 External Dependencies:
+- Font Awesome CSS
 - Bootstrap CSS
 - Bootstrap JS
 

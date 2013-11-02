@@ -13,6 +13,7 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
     <title>MyPhotos - PhotoRings</title>
     <link rel="shortcut icon" href="images/photorings_favicon.ico"/>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="sidenav/sidenav.css">
     <!--<link rel="stylesheet" href="css/skeleton.css">-->
 </head>

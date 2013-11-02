@@ -2,8 +2,9 @@
 <html>
 <head>
     <title>SideNav Example</title>
-    <!-- SideNav needs Bootstrap CSS, so include it if you haven't already -->
-    <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <!-- SideNav needs Bootstrap CSS and Font Awesome CSS, so include them if you haven't already -->
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css">
     <!-- Include SideNav's stylesheet after the Bootstrap stylesheet -->
     <link rel="stylesheet" href="sidenav.css">
 </head>
@@ -27,8 +28,8 @@
 
     <!-- Get them scripts. Load them last to improve page loading speeds. -->
     <!-- Bootstrap needs jQuery, so include it if you haven't already -->
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <!-- SideNav needs Bootstrap JS, so include it if you haven't already -->
-    <script src="http://netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
+    <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 </body>
 </html>
