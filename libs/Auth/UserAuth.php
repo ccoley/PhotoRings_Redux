@@ -144,6 +144,25 @@ class UserAuth {
         // If the password was not changed rollback the transaction
         if ($changed == false) {
             $db->rollBack();
+        } else {
+            include_once 'Mail.php';    // This is PEAR::Mail
+            include_once 'libs/Config/Config.php';
+            $config = new Config();
+
+            $from = "PhotoRings <photorings@codingallnight.com>";
+            $to = $username;    // This will only work if the username is a valid email address.
+            $subject = "Password Changed";
+            $body = "Your password was changed. If you did this, you should ignore this email. If you did not do this, be scared";
+            $headers = array("From"=>$from, "To"=>$to, "Subject"=>$subject);
+
+            $smtp = Mail::factory('smtp', $config->getPEARMailSMTPParams());
+            $mail = $smtp->send($to, $headers, $body);
+
+//            if (PEAR::isError($mail)) {
+//                //TODO Email wasn't sent, do something
+//            } else {
+//                //TODO Email was successfully sent, do something
+//            }
         }
 
         return $changed;
@@ -192,34 +211,34 @@ class UserAuth {
 
         // If password was reset send a notification email, Else rollback the transaction
         if ($reset) {
-//            $to = stripslashes($username);
-//            // some injection protection
-//            $illegals = array("%0A", "%0D", "%0a", "%0d", "Content-Type", "BCC:", "Bcc:", "bcc:", "CC:", "Cc:", "cc:", "TO:", "To:", "to:");
-//            $to = str_replace($illegals, "", $to);
-//            $getEmail = explode("@", $to);
-//
-//            // Only send if there is only one email address
-//            if (sizeof($getEmail) > 2) {
-//                return false;
-//            } else {
-//                // send email
-//                $from = "photorings@codingallnight.com";
-//                $subject = "Password Reset";
-//                $msg = "Your new password is: " . $newPass . " ";
-//
-//                // set mail headers
-//                $headers = "MIME-Version: 1.0 \r\n";
-//                $headers .= "Content-Type: text/html; \r\n";
-//                $headers .= "From: $from \r\n";
-//
-//                // now to send the email
-//                $sent = mail($to, $subject, $msg, $headers);
-//                if ($sent) {
-//                    return true;
-//                } else {
-//                    return false;
-//                }
-//            }
+            $to = stripslashes($username);
+            // some injection protection
+            $illegals = array("%0A", "%0D", "%0a", "%0d", "Content-Type", "BCC:", "Bcc:", "bcc:", "CC:", "Cc:", "cc:", "TO:", "To:", "to:");
+            $to = str_replace($illegals, "", $to);
+            $getEmail = explode("@", $to);
+
+            // Only send if there is only one email address
+            if (sizeof($getEmail) > 2) {
+                return false;
+            } else {
+                include_once 'Mail.php';    // This is PEAR::Mail
+                include_once 'libs/Config/Config.php';
+                $config = new Config();
+
+                $from = "PhotoRings <photorings@codingallnight.com>";
+                $subject = "Password Reset";
+                $body = "Your new password is: ".$newPass." ";
+                $headers = array("From"=>$from, "To"=>$to, "Subject"=>$subject);
+
+                $smtp = Mail::factory('smtp', $config->getPEARMailSMTPParams());
+                $mail = $smtp->send($to, $headers, $body);
+
+                if (PEAR::isError($mail)) {
+                    //TODO Email wasn't sent, do something
+                } else {
+                    //TODO Email was successfully sent, do something
+                }
+            }
         } else {
             $db->rollBack();
         }

@@ -90,5 +90,23 @@ if (extension_loaded('pdo_mysql')) {
 }
 
 
+### PHP PEAR packages
+include_once 'System.php';
+echo "<tr><td>PHP PEAR Framework</td>";
+if (class_exists('System')) {
+    echo "<td>Found</td><td></td></tr>";
+} else {
+    echo "<td>Not Found!</td><td>PhotoRings requires the PEAR framework for some functions.</td></tr>";
+}
+
+include_once 'Mail.php';
+echo "<tr><td>PHP PEAR::Mail</td>";
+if (class_exists('Mail')) {
+    echo "<td>Found</td><td></td></tr>";
+} else {
+    echo "<td>Not Found!</td><td>PhotoRings uses PEAR::Mail to send email to users.</td></tr>";
+}
+
+
 echo "</table>";
 ?>
