@@ -4,34 +4,47 @@
  * To see a pretty output of all these settings, and any errors, open ViewConfig.php in your browser.
  */
 class Config {
-    private $baseDir = "/var/www/photorings";       // Base directory for PhotoRings
-    private $webBase = "/photorings";
-    private $imgDir = "/user_images";       // Images directory, sub-directory of baseDir
-    private $libDir = "/libs";              // Libraries directory, sub-directory of baseDir
+    private $httpHost = "184.0.6.238";   // SERVER_NAME[:SERVER_PORT]
+    private $documentRoot = "/var/www";                     // The server's document root
+    private $baseRequestUrl = "/photorings";                // The website's base directory
+    private $imgDir = "/user_images";                       // User images directory, sub-directory of baseRequestUrl
+    private $originalImgDir = "/original";                  // Sub-directory that holds a user's original images
+    private $resizedImgDir = "/resized";                    // Sub-directory that holds a user's resized images
+//    private $libDir = "/libs";                              // Libraries directory, sub-directory of baseRequestUrl
 
 
-    public function getBaseDir() {
-        return $this->baseDir;
+    public function getHttpHost() {
+        return $this->httpHost;
     }
 
-    public function getImgDir() {
-        return $this->imgDir;
+    public function getDocRoot() {
+        return $this->documentRoot;
+    }
+
+    public function getBaseRequestUrl() {
+        return $this->baseRequestUrl;
+    }
+
+    public function getOriginalImgDir() {
+        return $this->originalImgDir . "/";
+    }
+
+    public function getResizedImgDir() {
+        return $this->resizedImgDir . "/";
     }
 
     public function getImgUploadPath() {
-        return $this->baseDir . $this->imgDir . '/';
+        return $this->documentRoot . $this->baseRequestUrl . $this->imgDir . "/";
     }
 
-    public function getImgWebPath() {
-        return $this->webBase . $this->imgDir . '/';
+    public function getImgUrl($userId, $fileName, $fullSize = false) {
+        $sizeDir = $fullSize ? $this->originalImgDir : $this->resizedImgDir;
+        return "//" . $this->httpHost . $this->baseRequestUrl . $this->imgDir . "/" . $userId . $sizeDir . "/" . $fileName;
     }
 
-    public function getLibDir() {
-        return $this->libDir;
-    }
-
-    public function getPathToLibDir() {
-        return $this->baseDir . $this->libDir . '/';
-    }
+//    public function getPathToLibDir() {
+//        return $this->baseRequestUrl.$this->libDir;
+////        return ltrim($this->libDir, '/');
+//    }
 }
 ?>

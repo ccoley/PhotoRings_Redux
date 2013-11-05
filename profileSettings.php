@@ -9,13 +9,17 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
 }
 
 //print_r($_POST);
+$passwordChanged = null;
 
 if ($_POST['action'] == 'changePassword') {
     if ($auth->changePassword($_SESSION['username'], $_POST['oldPassword'], $_POST['newPassword'])) {
         //TODO alert the user that their password was successfully changed
+		$passwordChanged = true;
+		
     } else {
         //TODO alert the user that their password was not changed
-//        echo 'Password not changed';
+        //echo 'Password not changed';
+		$passwordChanged = false;
     }
 }
 
@@ -42,7 +46,21 @@ $profile->buildFromUsername($_SESSION['username']);
     <!-- Main page content -->
     <div class="main">
         <div class="container">
-
+		
+		<?php
+		if ($passwordChanged === false){
+			echo '<div class="alert alert-danger alert-dismissable">
+				<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				<p>Oh Snap! The Password was not changed due to your stupid errors!</p>
+				</div>';
+	    }
+		else if ($passwordChanged === true) {
+			echo '<div class="alert alert-success alert-dismissable">
+				 <button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+				 <p>Your password was successfully changed. You will probably have to re-login! Fun!</p>
+				 </div>';
+		}
+		?>
             <!-- Profile Information Box -->
             <div class="row">
                 <div class="panel panel-default">
@@ -102,6 +120,7 @@ $profile->buildFromUsername($_SESSION['username']);
                                     <button type="submit" class="btn btn-default btn-submit">Update Password</button>
                                 </div>
                             </div>
+							
                         </form>
                     </div>
                 </div>
@@ -126,9 +145,15 @@ $profile->buildFromUsername($_SESSION['username']);
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Size of Uploaded Images</label>
+                                <label class="col-md-3 control-label">Size of Original Versions</label>
                                 <div class="col-md-9">
-                                    <p class="form-control-static"><? echo $profile->getDiskFootprint(); ?></p>
+                                    <p class="form-control-static"><? echo $profile->getDiskFootprint()[0]; ?></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Size of Resized Versions</label>
+                                <div class="col-md-9">
+                                    <p class="form-control-static"><? echo $profile->getDiskFootprint()[1]; ?></p>
                                 </div>
                             </div>
                         </form>
