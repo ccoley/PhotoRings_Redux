@@ -1,6 +1,6 @@
 <?php
 require_once 'libs/Auth/UserAuth.php';
-require_once 'libs/Auth/Profile.php';
+require_once 'libs/Profile.php';
 
 $auth = new UserAuth();
 // If the user is not logged in, redirect them to the splash page
@@ -113,6 +113,19 @@ $profile->buildFromUsername($_SESSION['username']);
                     <div class="panel-heading"><h4 class="panel-title">Your Profile Stats</h4></div>
                     <div class="panel-body">
                         <form class="form-horizontal">
+                            <div class="form-group">
+                                <label class="col-md-3 control-label"># of Rings</label>
+                                <div class="col-md-9">
+                                    <p class="form-control-static"><? echo $profile->getRingCount(); ?></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label"># of People in your Rings</label>
+                                <div class="col-md-9">
+                                    <p class="form-control-static"><? echo $profile->getFriendCount(); ?></p>
+                                </div>
+                            </div>
+                            <hr style="border-color:#FFB000;">
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Image Directory</label>
                                 <div class="col-md-9">

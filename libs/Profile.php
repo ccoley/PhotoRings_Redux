@@ -97,5 +97,32 @@ class Profile {
     public function isAdmin() {
         return ($this->privilege == 1);
     }
+
+    public function getRingCount() {
+        $db = new PhotoRings_DB();
+        $query = $db->prepare("SELECT COUNT(id) FROM rings WHERE owner_id=?");
+        $query->execute(array($this->id));
+        $result = $query->fetch(PDO::FETCH_NUM);
+
+        return $result[0];
+    }
+
+    public function getFriendCount() {
+        $db = new PhotoRings_DB();
+        $query = $db->prepare("SELECT COUNT(user_id) FROM ring_members WHERE ring_id=(SELECT id FROM rings WHERE owner_id=? AND spanning=TRUE)");
+        $query->execute(array($this->id));
+        $result = $query->fetch(PDO::FETCH_NUM);
+
+        return $result[0];
+    }
+
+    public function getRingIds() {
+        $db = new PhotoRings_DB();
+        $query = $db->prepare("SELECT id FROM rings WHERE owner_id=?");
+        $query->execute(array($this->id));
+        $results = $query->fetchAll(PDO::FETCH_NUM);
+
+        return $results;
+    }
 }
 ?>
