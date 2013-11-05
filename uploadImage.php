@@ -1,5 +1,5 @@
 <?php
-require_once 'libs/Auth/Profile.php';
+require_once 'libs/Profile.php';
 require_once 'libs/Database/PhotoRings_DB.php';
 require_once 'libs/Config/Config.php';
 require_once 'libs/ImageProc/Resize.php';

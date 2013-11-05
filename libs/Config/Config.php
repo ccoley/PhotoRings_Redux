@@ -4,14 +4,19 @@
  * To see a pretty output of all these settings, and any errors, open ViewConfig.php in your browser.
  */
 class Config {
-    private $httpHost = "frame.thebrokenbinary.com:8080";   // SERVER_NAME[:SERVER_PORT]
-    private $documentRoot = "/var/www";                     // The server's document root
-    private $baseRequestUrl = "/photorings";                // The website's base directory
-    private $imgDir = "/user_images";                       // User images directory, sub-directory of baseRequestUrl
-    private $originalImgDir = "/original";                  // Sub-directory that holds a user's original images
-    private $resizedImgDir = "/resized";                    // Sub-directory that holds a user's resized images
-//    private $libDir = "/libs";                              // Libraries directory, sub-directory of baseRequestUrl
+    // Server config settings
+    private $httpHost       = "frame.thebrokenbinary.com:8080"; // SERVER_NAME[:SERVER_PORT]
+    private $documentRoot   = "/var/www";                       // The server's document root
+    private $baseRequestUrl = "/photorings";                    // The website's base directory
+    private $imgDir         = "/user_images";                   // User images directory, sub-directory of baseRequestUrl
+    private $originalImgDir = "/original";                      // Sub-directory that holds a user's original images
+    private $resizedImgDir  = "/resized";                       // Sub-directory that holds a user's resized images
 
+    // PEAR::Mail settings
+    private $mailHost       = "ssl://smtp.gmail.com";
+    private $mailPort       = "465";
+    private $mailUsername   = "photorings@codingallnight.com";
+    private $mailPassword   = "SO6WBA36l77T0bj";
 
     public function getHttpHost() {
         return $this->httpHost;
@@ -42,9 +47,8 @@ class Config {
         return "//" . $this->httpHost . $this->baseRequestUrl . $this->imgDir . "/" . $userId . $sizeDir . "/" . $fileName;
     }
 
-//    public function getPathToLibDir() {
-//        return $this->baseRequestUrl.$this->libDir;
-////        return ltrim($this->libDir, '/');
-//    }
+    public function getPEARMailSMTPParams() {
+        return array("host"=>$this->mailHost, "port"=>$this->mailPort, "auth"=>true, "username"=>$this->mailUsername, "password"=>$this->mailPassword);
+    }
 }
 ?>
