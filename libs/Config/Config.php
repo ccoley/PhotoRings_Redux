@@ -19,7 +19,8 @@ class Config {
     private $mailPassword   = "SO6WBA36l77T0bj";
 
     public function getHttpHost() {
-        return $this->httpHost;
+//        return $this->httpHost;
+        return $_SERVER['HTTP_HOST'];   // For test purposes
     }
 
     public function getDocRoot() {
