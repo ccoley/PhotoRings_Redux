@@ -98,8 +98,10 @@ if (isset($_GET['ring'])) {
                         <div class="panel-body">
                             <ul class="list-unstyled">
                                 <?
-                                foreach ($members as $member) {
-                                    echo "<li class='member-list-item'><p><i class='fa fa-minus'> </i> ".$member['fname']." ".$member['lname']."</p></li>";
+                                if (isset($members)) {
+                                    foreach ($members as $member) {
+                                        echo "<li class='member-list-item'><p><i class='fa fa-minus'> </i> ".$member['fname']." ".$member['lname']."</p></li>";
+                                    }
                                 }
                                 ?>
                             </ul>
