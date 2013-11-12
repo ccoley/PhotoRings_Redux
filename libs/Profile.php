@@ -116,11 +116,22 @@ class Profile {
         return $result[0];
     }
 
-    public function getRingIds() {
+    /**
+     * This method returns the array of DB IDs for all rings owned by this profile.
+     * If the `spanning` ring is included, it will be the first ID in the array.
+     *
+     * @param bool $withSpanningRing Should the returned array include the `spanning` ring?
+     * @return array An array of DB IDs for all the user's rings
+     */
+    public function getRingIds($withSpanningRing = false) {
         $db = new PhotoRings_DB();
-        $query = $db->prepare("SELECT id FROM rings WHERE owner_id=?");
+        if ($withSpanningRing) {
+            $query = $db->prepare("SELECT id FROM rings WHERE owner_id=? ORDER BY spanning DESC, id");
+        } else {
+            $query = $db->prepare("SELECT id FROM rings WHERE (owner_id=? AND spanning=FALSE) ORDER BY id");
+        }
         $query->execute(array($this->id));
-        $results = $query->fetchAll(PDO::FETCH_NUM);
+        $results = $query->fetchAll(PDO::FETCH_COLUMN, 0);
 
         return $results;
     }
