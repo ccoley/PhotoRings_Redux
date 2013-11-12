@@ -6,8 +6,8 @@ class Ring {
     private $ownerId;
     private $name;
     private $spanning;
-    private $memberIds = array();
-    private $imageIds = array();
+    private $memberIds  = array();
+    private $imageIds   = array();
     private $modifiedRing       = false;
     private $modifiedMembers    = false;
     private $modifiedImages     = false;
@@ -88,6 +88,10 @@ class Ring {
         $query->execute(array($id));
         $results = $query->fetchAll(PDO::FETCH_ASSOC);
 
+        if (!$results || empty($results)) {
+            return false;
+        }
+
         $this->id       = $results[0]['id'];
         $this->ownerId  = $results[0]['owner_id'];
         $this->name     = $results[0]['name'];
@@ -96,12 +100,14 @@ class Ring {
         // Populate the memberIds array
         $query = $db->prepare("SELECT user_id FROM ring_members WHERE ring_id=?");
         $query->execute(array($this->id));
-        $this->memberIds = $query->fetchAll(PDO::FETCH_NUM);
+        $this->memberIds = $query->fetchAll(PDO::FETCH_COLUMN, 0);
 
         // Populate the imageIds array
         $query = $db->prepare("SELECT image_id FROM ring_images WHERE ring_id=?");
         $query->execute(array($this->id));
-        $this->imageIds = $query->fetchAll(PDO::FETCH_NUM);
+        $this->imageIds = $query->fetchAll(PDO::FETCH_COLUMN, 0);
+
+        return true;
     }
 
     public function save() {
