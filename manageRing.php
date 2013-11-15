@@ -64,7 +64,8 @@ if (isset($_GET['ring'])) {
                 <!-- Left Column -->
                 <div class="col-md-9">
                     <!-- Ring Display -->
-                    <div class="row panel panel-default">
+                    <div id="ringDisplay" class="row panel panel-default">
+                        <img class='template' src='' style=''>
                         <?
                         $interval = 2 * M_1_PI / $ring->getMemberCount();
                         ?>
@@ -115,6 +116,6 @@ if (isset($_GET['ring'])) {
     <!-- Get them scripts. Load them last to improve page loading speeds. -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <!--<script src="js/manageRing.js"></script>-->
+    <script src="js/manageRing.js"></script>
 </body>
 </html>

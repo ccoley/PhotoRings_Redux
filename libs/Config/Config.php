@@ -11,6 +11,7 @@ class Config {
     private $imgDir         = "/user_images";                   // User images directory, sub-directory of baseRequestUrl
     private $originalImgDir = "/original";                      // Sub-directory that holds a user's original images
     private $resizedImgDir  = "/resized";                       // Sub-directory that holds a user's resized images
+    private $profileImgDir  = "/profile";                       // Sub-directory that holds a user's profile images
 
     // PEAR::Mail settings
     private $mailHost       = "ssl://smtp.gmail.com";
@@ -37,6 +38,10 @@ class Config {
 
     public function getResizedImgDir() {
         return $this->resizedImgDir . "/";
+    }
+
+    public function getProfileImgDir() {
+        return $this->profileImgDir . "/";
     }
 
     public function getImgUploadPath() {
