@@ -1,6 +1,6 @@
 <?php
 // Requires
-require_once 'libs/Auth/UserAuth.php';
+require_once 'libs/UserAuth.php';
 
 // Check if the person is logged in.
 $auth = new UserAuth();
