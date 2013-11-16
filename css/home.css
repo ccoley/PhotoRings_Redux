@@ -1,11 +1,10 @@
-/* Dark Purple:     #371E4D */
-/* Medium Purple:   #603588 */
-/* Light Purple:    #894CC3 */
-/* Light Orange:    #FFB000 */
+/* Dark Purple:     #371E4D     rgb(55,30,77) */
+/* Medium Purple:   #603588     rgb(96,53,136) */
+/* Light Purple:    #894CC3     rgb(137,76,195) */
+/* Light Orange:    #FFB000     rgb(255,176,0) */
 
 body {
-    /*padding-top: 70px;*/
-    background: url("../images/0.png") repeat;
+    background: url("../images/bg_circles.jpg") repeat;
 }
 
 .white-text {

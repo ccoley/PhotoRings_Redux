@@ -10,22 +10,3 @@ body {
 .container {
     max-width: 970px;
 }
-
-/* Customize the dropzone */
-.dropzone {
-    padding: 15px;
-}
-
-.dropzone .dz-preview {
-    margin: 17px;
-}
-
-.dropzone .dz-preview .dz-details {
-    width: 130px;
-    height: 130px;
-}
-
-.dropzone .dz-preview .dz-details img {
-    width: 130px;
-    height: 130px;
-}
