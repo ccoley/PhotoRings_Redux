@@ -39,12 +39,12 @@ $(function() {
              * left:    radius + (radius - imgRadius)cos(theta)
              */
 
-            var animations = new Array();
+            var animations = [];
             for (var i = 0; i < data.length; i++) {
                 var topOffset = (halfHeight - ((halfHeight - imgRadius) * Math.sin(theta)) + paddingTop);
                 var leftOffset = halfWidth + ((halfWidth - imgRadius) * Math.cos(theta)) + paddingLeft;
                 theta += interval;
-                var item = $("#ringDisplay > img.template").clone();
+                var item = $("#ringImgTemplate").clone();
                 item.removeClass("template");
                 item.addClass("img-circle");
                 item.attr("id", "profileImg_"+data[i]['id']);

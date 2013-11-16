@@ -67,7 +67,7 @@ if (isset($_GET['ring'])) {
                 <div class="col-md-9">
                     <!-- Ring Display -->
                     <div id="ringDisplay" class="row panel panel-default text-center">
-                        <img class='template' src='' style=''>
+                        <img id="ringImgTemplate" class='template' src='' style=''>
                         <p class="h1"></p>
                     </div>
                     <!-- Ring Settings -->
