@@ -1,5 +1,5 @@
 <?php
-require_once 'libs/Database/PhotoRings_DB.php';
+require_once 'libs/PhotoRings_DB.php';
 
 class Ring {
     // Object properties

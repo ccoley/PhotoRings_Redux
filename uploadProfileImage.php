@@ -1,8 +1,8 @@
 <?php
 require_once 'libs/Profile.php';
-require_once 'libs/Database/PhotoRings_DB.php';
-require_once 'libs/Config/Config.php';
-require_once 'libs/ImageProc/Resize.php';
+require_once 'libs/PhotoRings_DB.php';
+require_once 'libs/Config.php';
+require_once 'libs/Resize.php';
 
 if (!empty($_FILES)) {
     $config = new Config();

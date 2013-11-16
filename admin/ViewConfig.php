@@ -4,7 +4,7 @@
  * To change the configuration, look in Config.php
  */
 
-require_once('../libs/Config/Config.php');
+require_once('../libs/Config.php');
 
 $config = new Config();
 

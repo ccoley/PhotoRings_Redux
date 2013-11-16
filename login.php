@@ -14,7 +14,6 @@ if ($_POST['action'] == 'login') {
     }
 } else if ($_POST['action'] == 'register') {
 //    print_r($_POST);
-    // TODO: Create the spanning ring for this user
     $auth->registerUser($_POST['firstName'], $_POST['lastName'], $_POST['email'], $_POST['password'], $_POST['birthdate']);
     header("Location: index.php");
 } else {

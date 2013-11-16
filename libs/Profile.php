@@ -1,6 +1,6 @@
 <?php
-include_once 'libs/Database/PhotoRings_DB.php';
-include_once 'libs/Config/Config.php';
+include_once 'libs/PhotoRings_DB.php';
+include_once 'libs/Config.php';
 
 class Profile {
     // Object properties

@@ -1,5 +1,9 @@
 <?php
-require_once 'libs/Auth/UserAuth.php';
+require_once 'libs/UserAuth.php';
+require_once 'libs/PhotoRings_DB.php';
+require_once 'libs/Profile.php';
+require_once 'libs/Config.php';
+
 $auth = new UserAuth();
 // If the user is not logged in, redirect them to the splash page
 if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
@@ -27,10 +31,6 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
     <div class="main">
         <div class="container">
             <?php
-				require_once 'libs/Database/PhotoRings_DB.php';
-				require_once 'libs/Profile.php';
-                require_once 'libs/Config/Config.php';
-
                 $config = new Config();
 				$profile = new Profile();
 				$profile->buildFromUsername($_SESSION['username']);

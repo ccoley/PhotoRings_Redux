@@ -1,5 +1,5 @@
 <?php
-require_once 'libs/Auth/UserAuth.php';
+require_once 'libs/UserAuth.php';
 require_once 'libs/Profile.php';
 
 $auth = new UserAuth();

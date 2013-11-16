@@ -1,12 +1,14 @@
 <?php
-require_once 'libs/Auth/UserAuth.php';
+require_once 'libs/UserAuth.php';
+require_once 'libs/Profile.php';
+require_once 'libs/PhotoRings_DB.php';
+
 $auth = new UserAuth();
 // If the user is not logged in, redirect them to the splash page
 if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
     header("Location: index.php");
 }
 
-require_once 'libs/Profile.php';
 $profile = new Profile();
 $profile->buildFromUsername($_SESSION['username']);
 $rings = $profile->getRingIds(true);
@@ -38,7 +40,6 @@ $spanningRing = array_shift($rings);
             <!-- All Friends Ring -->
             <div class="row panel main-ring">
                 <?
-                include_once 'libs/Database/PhotoRings_DB.php';
                 $db = new PhotoRings_DB();
                 $query = $db->prepare("SELECT rings.name, COUNT(ring_members.user_id) FROM rings, ring_members WHERE rings.id=? AND ring_members.ring_id=?");
                 $query->execute(array($spanningRing,$spanningRing));

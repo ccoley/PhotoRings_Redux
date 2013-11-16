@@ -1,5 +1,8 @@
 <?php
-require_once 'libs/Auth/UserAuth.php';
+require_once 'libs/UserAuth.php';
+require_once 'libs/PhotoRings_DB.php';
+require_once 'libs/Ring.php';
+
 $auth = new UserAuth();
 // If the user is not logged in, redirect them to the splash page
 if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
@@ -7,7 +10,6 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
 }
 
 if (isset($_GET['ring'])) {
-    require_once 'libs/Database/PhotoRings_DB.php';
     $db = new PhotoRings_DB();
     $query = $db->prepare("SELECT id FROM users WHERE email=?");
     $query->execute(array($_SESSION['username']));
@@ -18,7 +20,6 @@ if (isset($_GET['ring'])) {
     $result = $query->fetch(PDO::FETCH_COLUMN, 0);
 
     if ($result) {
-        require_once 'libs/Ring.php';
         $ring = new Ring();
         $ring->buildFromId($result);
 
