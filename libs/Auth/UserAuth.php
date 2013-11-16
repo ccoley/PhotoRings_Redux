@@ -5,7 +5,6 @@
  * @author Chris Coley <chris at codingallnight dot com>
  */
 
-/** @noinspection PhpIncludeInspection */
 require_once 'libs/Database/PhotoRings_DB.php';
 
 // For security reasons, don't display any errors or warnings. Comment out in DEV.
@@ -146,9 +145,7 @@ class UserAuth {
         if ($changed == false) {
             $db->rollBack();
         } else {
-            /** @noinspection PhpIncludeInspection */
             include_once 'Mail.php';    // This is PEAR::Mail
-            /** @noinspection PhpIncludeInspection */
             include_once 'libs/Config/Config.php';
             $config = new Config();
 
@@ -158,9 +155,7 @@ class UserAuth {
             $body = "Your password was changed. If you did this, you should ignore this email. If you did not do this, be scared";
             $headers = array("From"=>$from, "To"=>$to, "Subject"=>$subject);
 
-            /** @noinspection PhpUndefinedClassInspection */
             $smtp = Mail::factory('smtp', $config->getPEARMailSMTPParams());
-            /** @noinspection PhpUndefinedMethodInspection */
             $mail = $smtp->send($to, $headers, $body);
 
 //            if (PEAR::isError($mail)) {
@@ -226,9 +221,7 @@ class UserAuth {
             if (sizeof($getEmail) > 2) {
                 return false;
             } else {
-                /** @noinspection PhpIncludeInspection */
                 include_once 'Mail.php';    // This is PEAR::Mail
-                /** @noinspection PhpIncludeInspection */
                 include_once 'libs/Config/Config.php';
                 $config = new Config();
 
@@ -237,12 +230,9 @@ class UserAuth {
                 $body = "Your new password is: ".$newPass." ";
                 $headers = array("From"=>$from, "To"=>$to, "Subject"=>$subject);
 
-                /** @noinspection PhpUndefinedClassInspection */
                 $smtp = Mail::factory('smtp', $config->getPEARMailSMTPParams());
-                /** @noinspection PhpUndefinedMethodInspection */
                 $mail = $smtp->send($to, $headers, $body);
 
-                /** @noinspection PhpUndefinedClassInspection */
                 if (PEAR::isError($mail)) {
                     //TODO Email wasn't sent, do something
                 } else {
@@ -336,7 +326,6 @@ class UserAuth {
 
         // If the insert was successful, create the user's image directories
         if ($registered && !is_null($newUserId)) {
-            /** @noinspection PhpIncludeInspection */
             require_once 'libs/Config/Config.php';
             $config = new Config();
             $registered = $config->createUserDirectories($newUserId);
