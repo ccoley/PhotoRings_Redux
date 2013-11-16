@@ -59,9 +59,7 @@ $(function() {
                 animations.push(item);
             }
 
-//            var speed = 10000 / $(animations).size();
-            var speed = 10000 / 6;
-            doQueuedAnimations(animations, 400 / animations.length);
+            doQueuedAnimations(animations, 500 / animations.length);
         },
         error: function(data) {
             console.log("ERROR");
