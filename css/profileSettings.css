@@ -14,3 +14,49 @@ body {
 .container {
     max-width: 970px;
 }
+
+#profileImgPanel {
+    padding: 0;
+}
+
+#profileImgPanel > p {
+    clear: both;
+    font-weight: bold;
+}
+
+#profileImg {
+    display: block;
+    float: left;
+    min-width: 192px;
+    min-height: 192px;
+    width: 25%;
+    padding: 15px 0 15px 15px;
+}
+
+.profile-img {
+    display: block;
+    width: 192px;
+    height: 192px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+#dropzoneDiv {
+    float: left;
+    width: 75%;
+    padding: 15px;
+    min-width: 480px;
+    overflow: hidden;
+}
+
+/* Customize the dropzone */
+.dropzone {
+    padding: 10px;
+    max-height: 192px;
+    min-height: 192px;
+    border: 1px solid #ccc;
+}
+
+.dropzone .dz-preview {
+    margin-bottom: 30px;
+}

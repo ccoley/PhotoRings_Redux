@@ -9,6 +9,7 @@ class Profile {
     private $firstName;
     private $lastName;
     private $dob;
+    private $picture;
     private $privilege;
 
     public function buildFromUsername($username) {
@@ -22,6 +23,7 @@ class Profile {
         $this->firstName    = $results[0]['fname'];
         $this->lastName     = $results[0]['lname'];
         $this->dob          = $results[0]['birthdate'];
+        $this->picture      = $results[0]['image'];
         $this->privilege    = $results[0]['privilege'];
     }
 
@@ -89,9 +91,12 @@ class Profile {
         $io = popen('/usr/bin/du -sh ' . $f . $config->getResizedImgDir(), 'r');
         $resized = fgets($io);
         $resized = substr($resized, 0, strpos($resized, "\t"));
+        $io = popen('/usr/bin/du -sh ' . $f . $config->getProfileImgDir(), 'r');
+        $profile = fgets($io);
+        $profile = substr($profile, 0, strpos($profile, "\t"));
         pclose($io);
 
-        return array($fullSize, $resized);
+        return array($fullSize, $resized, $profile);
     }
 
     public function isAdmin() {
@@ -134,6 +139,11 @@ class Profile {
         $results = $query->fetchAll(PDO::FETCH_COLUMN, 0);
 
         return $results;
+    }
+
+    public function getProfilePictureURL() {
+        $config = new Config();
+        return $config->getProfileImgUrl($this->id, $this->picture);
     }
 }
 ?>

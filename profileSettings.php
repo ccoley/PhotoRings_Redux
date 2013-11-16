@@ -31,7 +31,10 @@ $profile->buildFromUsername($_SESSION['username']);
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="sidenav/sidenav.css">
+    <link rel="stylesheet" href="css/dropzone.css">
     <link rel="stylesheet" href="css/profileSettings.css">
+    <script src="js/dropzone.min.js"></script>
+    <script src="js/profileSettings.js"></script>
 </head>
 <body>
     <!-- Side navigation -->
@@ -71,6 +74,28 @@ $profile->buildFromUsername($_SESSION['username']);
                     </div>
                 </div>
             </div> <!-- END Profile Information Box -->
+
+            <!-- Change Profile Picture Form -->
+            <div class="row">
+                <div class="panel panel-default">
+                    <div class="panel-heading"><h4 class="panel-title">Change Profile Picture</h4></div>
+                    <div id="profileImgPanel" class="panel-body">
+                        <div id="profileImg" class="">
+                            <img class="profile-img img-rounded" src="<? echo $profile->getProfilePictureURL(); ?>" alt="profile image"/>
+                        </div>
+                        <div id="dropzoneDiv" class="">
+                            <form class="dropzone" action="uploadProfileImage.php" id="uploadDropzone">
+                                <input type="hidden" name="username" value="<? echo $_SESSION['username']; ?>">
+                                <div class="fallback">
+                                    <input type="file" name="file"/>
+                                </div>
+                            </form>
+                        </div>
+                        <br>
+                        <p class="text-center">You can upload images that are less than 5mb in size and have one of these extensions: .jpg, .jpeg, .png</p>
+                    </div>
+                </div>
+            </div> <!-- END Change Profile Picture Form -->
 
             <!-- Password Change Form -->
             <div class="row">
@@ -138,16 +163,23 @@ $profile->buildFromUsername($_SESSION['username']);
                                     <p class="form-control-static"><? echo $profile->getImageCount(); ?></p>
                                 </div>
                             </div>
+                            <? $footprint = $profile->getDiskFootprint(); ?>
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Size of Original Versions</label>
                                 <div class="col-md-9">
-                                    <p class="form-control-static"><? echo $profile->getDiskFootprint()[0]; ?></p>
+                                    <p class="form-control-static"><? echo $footprint[0]; ?></p>
                                 </div>
                             </div>
                             <div class="form-group">
                                 <label class="col-md-3 control-label">Size of Resized Versions</label>
                                 <div class="col-md-9">
-                                    <p class="form-control-static"><? echo $profile->getDiskFootprint()[1]; ?></p>
+                                    <p class="form-control-static"><? echo $footprint[1]; ?></p>
+                                </div>
+                            </div>
+                            <div class="form-group">
+                                <label class="col-md-3 control-label">Size of Profile Images</label>
+                                <div class="col-md-9">
+                                    <p class="form-control-static"><? echo $footprint[2]; ?></p>
                                 </div>
                             </div>
                         </form>

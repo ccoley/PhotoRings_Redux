@@ -48,13 +48,34 @@ class Config {
         return $this->documentRoot . $this->baseRequestUrl . $this->imgDir . "/";
     }
 
-    public function getImgUrl($userId, $fileName, $fullSize = false) {
+    public function getImgUrl($userId, $fileName, $fullSize) {
         $sizeDir = $fullSize ? $this->originalImgDir : $this->resizedImgDir;
         return "//" . $this->httpHost . $this->baseRequestUrl . $this->imgDir . "/" . $userId . $sizeDir . "/" . $fileName;
     }
 
+    public function getProfileImgUrl($userId, $fileName) {
+        return "//" . $this->httpHost . $this->baseRequestUrl . $this->imgDir . "/" . $userId . $this->profileImgDir . "/" . $fileName;
+    }
+
     public function getPEARMailSMTPParams() {
         return array("host"=>$this->mailHost, "port"=>$this->mailPort, "auth"=>true, "username"=>$this->mailUsername, "password"=>$this->mailPassword);
+    }
+
+    public function createUserDirectories($userId) {
+        $flag1 = $flag2 = $flag3 = true;
+        $base =  $this->getImgUploadPath() . $userId;
+
+        if (!is_dir($base.$this->originalImgDir)) {
+            $flag1 = mkdir($base.$this->originalImgDir, 0700, true);
+        }
+        if (!is_dir($base.$this->resizedImgDir)) {
+            $flag2 = mkdir($base.$this->resizedImgDir, 0700, true);
+        }
+        if (!is_dir($base.$this->profileImgDir)) {
+            $flag3 = mkdir($base.$this->profileImgDir, 0700, true);
+        }
+
+        return $flag1 && $flag2 && $flag3;
     }
 }
 ?>
