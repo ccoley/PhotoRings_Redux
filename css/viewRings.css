@@ -23,6 +23,10 @@ body {
     max-width: 970px;
 }
 
+.page-header {
+    margin-top: 0;
+}
+
 .main-ring, .other-rings {
     /*background-color: rgba(255,255,255,0.4);*/
     /*border-radius: 4px;*/

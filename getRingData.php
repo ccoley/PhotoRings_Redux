@@ -1,6 +1,7 @@
 <?php
-//require_once 'libs/PhotoRings_DB.php';
+require_once 'libs/PhotoRings_DB.php';
 require_once 'libs/Ring.php';
+require_once 'libs/Config.php';
 
 if (isset($_REQUEST['ring']) && isset($_REQUEST['user'])) {
     $ringID = intval($_REQUEST['ring']);
@@ -18,8 +19,19 @@ if (isset($_REQUEST['ring']) && isset($_REQUEST['user'])) {
         return false;
     }
     $memberIds = $ring->getMemberIds();
-    print json_encode($memberIds);
-    //return true;
+
+    $config = new Config();
+    $members = array();
+
+    $db = new PhotoRings_DB();
+    $query = $db->prepare("SELECT image FROM users WHERE id=?");
+    foreach ($memberIds as $id) {
+        $query->execute(array($id));
+        $image = $query->fetchColumn(0);
+        $members[] = array('id' => $id, 'image'=>$config->getProfileImgUrl($id, $image));
+    }
+    print json_encode($members);
+    return true;
 } else {
     return false;
 }

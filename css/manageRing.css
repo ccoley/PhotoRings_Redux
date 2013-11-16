@@ -5,6 +5,7 @@
 
 body {
     background: url("../images/bg_circles.jpg") repeat;
+    color: #666;
 }
 
 .white-text {
@@ -25,6 +26,22 @@ body {
 
 .row {
     margin-bottom: 15px;
+}
+
+.page-header {
+    margin-top: 0;
+}
+
+.template {
+    display: none;
+}
+
+#rightColumn {
+    padding-right: 0;
+}
+
+#rightColumn > .panel {
+    height: 716px;
 }
 
 .ring-box {
@@ -52,6 +69,24 @@ body {
     margin-top: -32px;
     margin-left: -32px;
     position: absolute;
+}
+
+#ringDisplay {
+    padding: 15px;
+    height: 530px;
+}
+
+#ringDisplay > p {
+    line-height: 500px;
+    /*width: 100%;*/
+}
+
+#ringDisplay > img {
+    position: absolute;
+    height: 64px;
+    width: 64px;
+    margin-top: -32px;
+    margin-left: -32px;
 }
 
 #outerCircle {

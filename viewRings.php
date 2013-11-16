@@ -2,6 +2,7 @@
 require_once 'libs/UserAuth.php';
 require_once 'libs/Profile.php';
 require_once 'libs/PhotoRings_DB.php';
+require_once 'libs/Config.php';
 
 $auth = new UserAuth();
 // If the user is not logged in, redirect them to the splash page
@@ -34,8 +35,8 @@ $spanningRing = array_shift($rings);
     <!-- Main page content -->
     <div class="main">
         <div class="container">
-            <div class="page-header orange-border white-text text-center">
-                <h1>Manage Rings</h1>
+            <div class="row page-header orange-border white-text text-center">
+                <h1>All Your Rings</h1>
             </div>
             <!-- All Friends Ring -->
             <div class="row panel main-ring">

@@ -2,6 +2,7 @@
 require_once 'libs/UserAuth.php';
 require_once 'libs/PhotoRings_DB.php';
 require_once 'libs/Ring.php';
+require_once 'libs/Config.php';
 
 $auth = new UserAuth();
 // If the user is not logged in, redirect them to the splash page
@@ -26,7 +27,7 @@ if (isset($_GET['ring'])) {
         // Get the ID and name of every member of this ring
         $memberIds = $ring->getMemberIds();
         $placeHolder = implode(',', array_fill(0, count($memberIds), '?'));
-        $query = $db->prepare("SELECT id, fname, lname FROM users WHERE id IN ($placeHolder)");
+        $query = $db->prepare("SELECT id, fname, lname, image FROM users WHERE id IN ($placeHolder)");
         $query->execute($memberIds);
         $members = $query->fetchAll(PDO::FETCH_ASSOC);
     } else {
@@ -65,12 +66,9 @@ if (isset($_GET['ring'])) {
                 <!-- Left Column -->
                 <div class="col-md-9">
                     <!-- Ring Display -->
-                    <div id="ringDisplay" class="row panel panel-default">
+                    <div id="ringDisplay" class="row panel panel-default text-center">
                         <img class='template' src='' style=''>
-                        <?
-                        $interval = 2 * M_1_PI / $ring->getMemberCount();
-                        ?>
-                        <h1>Put a big ass circle of profile images in here!</h1>
+                        <p class="h1"></p>
                     </div>
                     <!-- Ring Settings -->
                     <div class="row panel panel-default">
@@ -94,7 +92,7 @@ if (isset($_GET['ring'])) {
                     </div>
                 </div>
                 <!-- Right Column -->
-                <div class="col-md-3">
+                <div id="rightColumn" class="col-md-3">
                     <div class="panel panel-default">
                         <div class="panel-heading">Members</div>
                         <div class="panel-body">
