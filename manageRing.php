@@ -27,7 +27,7 @@ if (isset($_GET['ring'])) {
         // Get the ID and name of every member of this ring
         $memberIds = $ring->getMemberIds();
         $placeHolder = implode(',', array_fill(0, count($memberIds), '?'));
-        $query = $db->prepare("SELECT id, fname, lname, image FROM users WHERE id IN ($placeHolder)");
+        $query = $db->prepare("SELECT id, fname, lname, profile_image FROM users WHERE id IN ($placeHolder)");
         $query->execute($memberIds);
         $members = $query->fetchAll(PDO::FETCH_ASSOC);
     } else {

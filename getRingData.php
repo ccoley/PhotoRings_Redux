@@ -28,10 +28,10 @@ if (isset($_REQUEST['ring']) && isset($_REQUEST['user'])) {
     foreach ($memberIds as $id) {
         $query->execute(array($id));
         $image = $query->fetchColumn(0);
-        $members[] = array('id' => $id, 'image'=>$config->getProfileImgUrl($id, $image));
+        $members[] = array('id' => $id, 'profile_image'=>$config->getProfileImgUrl($id, $image));
     }
     print json_encode($members);
-    return true;
+//    return true;
 } else {
     return false;
 }

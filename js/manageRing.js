@@ -48,7 +48,7 @@ $(function() {
                 item.removeClass("template");
                 item.addClass("img-circle");
                 item.attr("id", "profileImg_"+data[i]['id']);
-                item.attr("src", data[i]['image']);
+                item.attr("src", data[i]['profile_image']);
                 item.css('top', topOffset.toFixed(2) + 'px');
                 item.css('left', leftOffset.toFixed(2) + 'px');
 //                item.offset({top:topOffset, left:leftOffset});
