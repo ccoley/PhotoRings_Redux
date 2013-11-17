@@ -24,7 +24,7 @@ if (isset($_REQUEST['ring']) && isset($_REQUEST['user'])) {
     $members = array();
 
     $db = new PhotoRings_DB();
-    $query = $db->prepare("SELECT image FROM users WHERE id=?");
+    $query = $db->prepare("SELECT profile_image FROM users WHERE id=?");
     foreach ($memberIds as $id) {
         $query->execute(array($id));
         $image = $query->fetchColumn(0);

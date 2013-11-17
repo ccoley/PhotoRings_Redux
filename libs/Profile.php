@@ -23,7 +23,7 @@ class Profile {
         $this->firstName    = $results[0]['fname'];
         $this->lastName     = $results[0]['lname'];
         $this->dob          = $results[0]['birthdate'];
-        $this->picture      = $results[0]['image'];
+        $this->picture      = $results[0]['profile_image'];
         $this->privilege    = $results[0]['privilege'];
     }
 
