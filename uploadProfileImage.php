@@ -48,7 +48,7 @@ if (!empty($_FILES)) {
 
     // Insert a row in the images table for the image
     $db = new PhotoRings_DB();
-    $query = $db->prepare("UPDATE users SET image=? WHERE id=?");
+    $query = $db->prepare("UPDATE users SET profile_image=? WHERE id=?");
     $flag = $query->execute(array($fileName, $userId));
     return ($flag != false);
 }
