@@ -2,6 +2,7 @@
 require_once 'libs/UserAuth.php';
 
 $auth = new UserAuth();
+$registerFailed = "display:none;";
 
 if ($_POST['action'] == 'login') {
     if ($auth->login($_POST['email'], $_POST['password']) == true) {
@@ -14,10 +15,15 @@ if ($_POST['action'] == 'login') {
     }
 } else if ($_POST['action'] == 'register') {
 //    print_r($_POST);
-    $auth->registerUser($_POST['firstName'], $_POST['lastName'], $_POST['email'], $_POST['password'], $_POST['birthdate']);
-    header("Location: index.php");
-} else {
-    echo '
+	if ($auth->registerUser($_POST['firstName'], $_POST['lastName'], $_POST['email'], $_POST['password'], $_POST['birthdate'])) {
+		header("Location: index.php");
+	}
+	else {
+		$registerFailed = "display:inherit";
+	} 
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -31,9 +37,15 @@ if ($_POST['action'] == 'login') {
             <h1>PhotoRings Login</h1>
         </div>
     </div>
+	
 
     <div class="content container">
-        <div class="well col-md-offset-1 col-md-10">
+       	<div class="alert alert-danger alert-dismissable" style="<?php echo $registerFailed; ?>">
+			<button type="button" class="close" data-dismiss="alert" aria-hidden="true">&times;</button>
+		<b>That email is already registered.</b>
+		</div>
+		
+		<div class="well col-md-offset-1 col-md-10">
             <ul class="nav nav-tabs">
                 <li class="active"><a href="#login" data-toggle="tab">Login</a></li>
                 <li><a href="#create" data-toggle="tab">Create Account</a></li>
@@ -109,9 +121,7 @@ if ($_POST['action'] == 'login') {
                     </form>
                 </div>
             </div>
-            <?
-            print_r($_REQUEST);
-            ?>
+            
         </div>
     </div>
 
@@ -119,5 +129,3 @@ if ($_POST['action'] == 'login') {
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
 </body>
 </html>
-';
-}
