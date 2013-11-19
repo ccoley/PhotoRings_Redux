@@ -38,6 +38,18 @@ body {
     padding: 15px 0 15px 15px;
 }
 
+#changeSuccess {
+	margin-left: -15px;
+	margin-right: -15px;
+	
+}
+
+#changeFailed {
+	margin-left: -15px;
+	margin-right: -15px;
+	
+}
+
 .profile-img {
     display: block;
     width: 192px;

@@ -3,6 +3,8 @@ require_once 'libs/UserAuth.php';
 require_once 'libs/Profile.php';
 
 $auth = new UserAuth();
+$passwordSuccess = "display:none;";
+$passwordFailed = "display:none;";
 // If the user is not logged in, redirect them to the splash page
 if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
     header("Location: index.php");
@@ -13,14 +15,18 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
 if ($_POST['action'] == 'changePassword') {
     if ($auth->changePassword($_SESSION['username'], $_POST['oldPassword'], $_POST['newPassword'])) {
         //TODO alert the user that their password was successfully changed
+		$passwordSuccess = "display:inherit;";	
+		
     } else {
         //TODO alert the user that their password was not changed
-//        echo 'Password not changed';
+		//echo 'Password not changed';
+		$passwordFailed = "display:inherit;";
     }
 }
 
 $profile = new Profile();
 $profile->buildFromUsername($_SESSION['username']);
+
 ?>
 
 <!DOCTYPE html>
@@ -32,10 +38,13 @@ $profile->buildFromUsername($_SESSION['username']);
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="sidenav/sidenav.css">
     <link rel="stylesheet" href="css/dropzone.css">
-    <link rel="stylesheet" href="css/profileSettings.css">
+    <link rel="stylesheet" href="css/profileSettings.css">	
     <script src="js/dropzone.min.js"></script>
     <script src="js/profileSettings.js"></script>
 </head>
+
+
+
 <body>
     <!-- Side navigation -->
     <div class="sidebar pull-left">
@@ -47,6 +56,9 @@ $profile->buildFromUsername($_SESSION['username']);
         <div class="container">
 
             <!-- Profile Information Box -->
+			<div class="alert alert-success" id="changeSuccess" style="<?php echo $passwordSuccess; ?>"><b>Your PASSWORD was successfully CHANGED!</b></div>
+			<div class="alert alert-danger" id="changeFailed" style="<?php echo $passwordFailed; ?>"><b>Your PASSWORD was NOT CHANGED! Please check new passwords to see that they match.</b></div>
+						
             <div class="row">
                 <div class="panel panel-default">
                     <div class="panel-heading"><h4 class="panel-title">Your Profile Information</h4></div>
@@ -122,6 +134,10 @@ $profile->buildFromUsername($_SESSION['username']);
                                     <input type="password" class="form-control" id="confirmNewPassword" name="confirmNewPassword" placeholder="">
                                 </div>
                             </div>
+							
+							
+							
+							
                             <div class="form-group">
                                 <div class="col-md-offset-3 col-md-9">
                                     <button type="submit" class="btn btn-default btn-submit">Update Password</button>
