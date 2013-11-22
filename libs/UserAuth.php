@@ -53,7 +53,7 @@ class UserAuth {
         }
 
         // Execute the login
-        $query = $db->prepare("SELECT ".$this->user_column.", ".$this->pass_column.", ".$this->user_level." FROM ".$this->user_table." WHERE ".$this->user_column."=? AND ".$this->pass_column."=?");
+        $query = $db->prepare("SELECT id, ".$this->user_column.", ".$this->pass_column.", ".$this->user_level." FROM ".$this->user_table." WHERE ".$this->user_column."=? AND ".$this->pass_column."=?");
         if ($query != false) {
             if ($query->execute(array($username, $password))) {
                 $result = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -64,7 +64,7 @@ class UserAuth {
                     // These session variables are only needed for additional functionality
                     $_SESSION['username'] = $result[0][$this->user_column];
                     $_SESSION['privilege'] = $result[0][$this->user_level];
-                    return true;
+                    return $result[0]["id"];
                 }
             }
         }
@@ -297,7 +297,15 @@ class UserAuth {
         } catch (PDOException $e) {
             return false;
         }
-
+		
+		// Check to see if the entered email exists in the system already.
+		$query = $db->prepare("SELECT COUNT(email) FROM users WHERE email=?");
+		$query->execute(array($username)); 
+		if ($query->fetchColumn(0) > 0) {
+			// email already exists, fail the registration.
+			return false;
+		}		
+		
         // Convert the username to lowercase
         $username = strtolower($username);
 

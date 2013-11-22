@@ -1,7 +1,7 @@
 $(function() {
     var urlVars = location.search.substring(1).split('&');
     var data = {ring:urlVars[0].split('=')[1],
-                user:13};
+                user:17};
 
     // Make the ringDisplay a square
 //    $("#ringDisplay").height($("#ringDisplay").width());
