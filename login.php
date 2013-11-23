@@ -5,7 +5,8 @@ $auth = new UserAuth();
 $registerFailed = "display:none;";
 
 if ($_POST['action'] == 'login') {
-    if ($auth->login($_POST['email'], $_POST['password']) == true) {
+    if (($userId = $auth->login($_POST['email'], $_POST['password'])) !== false) {
+        setcookie('userId', $userId);
 //        echo '<br>Session:<br>';
 //        print_r($_SESSION);
         header('Location: home.php');
