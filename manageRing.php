@@ -43,7 +43,7 @@ if (isset($_GET['ring'])) {
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Create a Ring - PhotoRings</title>
+    <title><? echo $ring->getName(); ?> Ring - PhotoRings</title>
     <link rel="shortcut icon" href="images/photorings_favicon.ico"/>
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css">
     <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css">
@@ -59,54 +59,58 @@ if (isset($_GET['ring'])) {
     <!-- Main page content -->
     <div class="main">
         <div class="container">
-            <div class="row page-header orange-border white-text text-center">
+            <div class="page-header orange-border white-text text-center">
                 <h1><? echo $ring->getName(); ?></h1>
             </div>
             <div class="row">
-                <!-- Left Column -->
-                <div class="col-md-9">
+                <div class="col-lg-9">
                     <!-- Ring Display -->
-                    <div id="ringDisplay" class="row panel panel-default text-center">
+                    <div id="ringDisplay" class="panel panel-default text-center">
                         <img id="ringImgTemplate" class='template' src='' style=''>
                         <p class="h1"></p>
                     </div>
-                    <!-- Ring Settings -->
-                    <div class="row panel panel-default">
-                        <div class="panel-heading">Ring Settings</div>
+                </div>
+                <div class="col-lg-3">
+                    <!-- Member List -->
+                    <div id="memberList" class="panel panel-default">
+                        <div class="panel-heading"><h3 class="panel-title">Members</h3></div>
+                        <div class="panel-body">
+                            <ul id="members" class="list-unstyled">
+                                <li id="memberTemplate" class="template"><p><button class="btn btn-default btn-xs"><i class='fa fa-minus'></i></button></p></li>
+                            </ul>
+                            <hr>
+                            <ul id="otherFriends" class="list-unstyled">
+                                <li id="otherFriendTemplate" class="template"><p><button class="btn btn-default btn-xs"><i class='fa fa-plus'></i></button></p></li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-9">
+                    <div class="panel panel-default">
+                        <div class="panel-heading"><h3 class="panel-title">Ring Settings</h3></div>
                         <div class="panel-body">
                             <form class="form-horizontal" role="form" action="manageRing.php" method="post">
                                 <input type="hidden" name="action" value="updateRing">
                                 <div class="form-group">
-                                    <label for="oldPassword" class="col-md-2 control-label">Ring Name</label>
+                                    <label for="ringName" class="col-md-2 control-label">Ring Name</label>
                                     <div class="col-md-10">
-                                        <input type="password" class="form-control" id="oldPassword" name="oldPassword" placeholder="<? echo $ring->getName(); ?>">
-                                    </div>
-                                </div>
-                                <div class="form-group">
-                                    <div class="col-md-offset-2 col-md-10">
-                                        <button type="submit" class="btn btn-default btn-submit">Save Changes</button>
+                                        <?
+                                        if ($ring->isSpanning()) {
+                                            echo '<p class="form-control-static">'.$ring->getName().'</p>';
+                                        } else {
+                                            echo '<input type="text" class="form-control" id="ringName" name="ringName" placeholder="'.$ring->getName().'">';
+                                        }
+                                        ?>
                                     </div>
                                 </div>
                             </form>
                         </div>
                     </div>
                 </div>
-                <!-- Right Column -->
-                <div id="rightColumn" class="col-md-3">
-                    <div class="panel panel-default">
-                        <div class="panel-heading">Members</div>
-                        <div class="panel-body">
-                            <ul class="list-unstyled">
-                                <?
-                                if (isset($members)) {
-                                    foreach ($members as $member) {
-                                        echo "<li class='member-list-item'><p><i class='fa fa-minus'> </i> ".$member['fname']." ".$member['lname']."</p></li>";
-                                    }
-                                }
-                                ?>
-                            </ul>
-                        </div>
-                    </div>
+                <div class="col-lg-3">
+                    <button id="saveButton" type="button" class="btn btn-lg btn-block" disabled="disabled">Save Changes</button>
                 </div>
             </div>
         </div>

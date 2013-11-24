@@ -76,9 +76,9 @@ class Profile {
         $db = new PhotoRings_DB();
         $query = $db->prepare("SELECT COUNT(id) FROM images WHERE owner_id=?");
         $query->execute(array($this->id));
-        $result = $query->fetch(PDO::FETCH_NUM);
+        $result = $query->fetchColumn(0);
 
-        return $result[0];
+        return $result;
     }
 
     public function getDiskFootprint() {
@@ -107,18 +107,26 @@ class Profile {
         $db = new PhotoRings_DB();
         $query = $db->prepare("SELECT COUNT(id) FROM rings WHERE owner_id=?");
         $query->execute(array($this->id));
-        $result = $query->fetch(PDO::FETCH_NUM);
+        $result = $query->fetchColumn(0);
 
-        return $result[0];
+        return $result;
     }
 
     public function getFriendCount() {
         $db = new PhotoRings_DB();
         $query = $db->prepare("SELECT COUNT(user_id) FROM ring_members WHERE ring_id=(SELECT id FROM rings WHERE owner_id=? AND spanning=TRUE)");
         $query->execute(array($this->id));
-        $result = $query->fetch(PDO::FETCH_NUM);
+        $result = $query->fetchColumn(0);
 
-        return $result[0];
+        return $result;
+    }
+
+    public function getFriendIds() {
+        $db = new PhotoRings_DB();
+        $query = $db->prepare("SELECT user_id FROM ring_members WHERE ring_id=(SELECT id FROM rings WHERE owner_id=? AND spanning=TRUE)");
+        $query->execute(array($this->id));
+        $result = $query->fetchAll(PDO::FETCH_COLUMN);
+        return $result;
     }
 
     /**

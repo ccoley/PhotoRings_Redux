@@ -1,7 +1,7 @@
 $(function() {
     var urlVars = location.search.substring(1).split('&');
     var data = {ring:urlVars[0].split('=')[1],
-                user:17};
+                user: getCookie('userId')};
 
     // Make the ringDisplay a square
 //    $("#ringDisplay").height($("#ringDisplay").width());
@@ -16,47 +16,58 @@ $(function() {
         success: function(data) {
             console.log("Success");
             console.log(data);
-            console.log(data[2]);
-//            var members = $.parseJSON(data);
-//            console.log(members);
+            console.log(data['members']);
 
-            $("#ringDisplay > p").text(data.length + " Members");
+            var members = data['members'];
+            var otherFriends = data['otherFriends'];
 
-            var interval = 2 * Math.PI / data.length;
+            for (var i = 0; i < members.length; i++) {
+                var memberItem = $("#memberTemplate").clone();
+                memberItem.removeClass('template');
+                memberItem.addClass('member-list-item');
+                memberItem.attr('id', 'person_'+members[i]['id']);
+                memberItem.find('i').attr('onclick', 'removeMember('+members[i]['id']+')');
+                memberItem.find('p').append(members[i]['name']);
+                $("#members").append(memberItem);
+            }
+
+            for (var i = 0; i < otherFriends.length; i++) {
+                var otherFriendItem = $("#otherFriendTemplate").clone();
+                otherFriendItem.removeClass('template');
+                otherFriendItem.addClass('member-list-item');
+                otherFriendItem.attr('id', 'person_'+otherFriends[i]['id']);
+                otherFriendItem.find('p').append(otherFriends[i]['name']);
+                $("#otherFriends").append(otherFriendItem);
+            }
+
+            $("#ringDisplay > p").text(members.length + " Members");
+
+            var interval = 2 * Math.PI / members.length;
             var theta = Math.PI / 2;
             var halfWidth = $("#ringDisplay").width() / 2;
             var halfHeight = $("#ringDisplay").height() / 2;
             var imgRadius = 32;
             var paddingLeft = parseInt($("#ringDisplay").css('padding-left'));
             var paddingTop = parseInt($("#ringDisplay").css('padding-top'));
-//            var paddingLeft = 0;
-//            var paddingTop = 0;
 
-            /*
-             * Trigonometric functions for the image locations where `radius` is the radius of the bounding box
-             *
-             * top:     radius - (radius - imgRadius)sin(theta)
-             * left:    radius + (radius - imgRadius)cos(theta)
-             */
-
+            // Trigonometric functions for the image locations where `radius` is the radius of the bounding box
+            // top:     radius - (radius - imgRadius)sin(theta)
+            // left:    radius + (radius - imgRadius)cos(theta)
             var animations = [];
-            for (var i = 0; i < data.length; i++) {
-                var topOffset = (halfHeight - ((halfHeight - imgRadius) * Math.sin(theta)) + paddingTop);
-                var leftOffset = halfWidth + ((halfWidth - imgRadius) * Math.cos(theta)) + paddingLeft;
+            for (var i = 0; i < members.length; i++) {
+                var topOffset = halfHeight - ((halfHeight - imgRadius) * Math.sin(theta)) + paddingTop;
+                var leftOffset = halfWidth + ((halfWidth - imgRadius) * Math.cos(theta)) + (imgRadius - paddingLeft/2);
                 theta += interval;
-                var item = $("#ringImgTemplate").clone();
-                item.removeClass("template");
-                item.addClass("img-circle");
-                item.attr("id", "profileImg_"+data[i]['id']);
-                item.attr("src", data[i]['profile_image']);
-                item.css('top', topOffset.toFixed(2) + 'px');
-                item.css('left', leftOffset.toFixed(2) + 'px');
-//                item.offset({top:topOffset, left:leftOffset});
-                $("#ringDisplay").append(item);
-                item.hide();
-//                item.delay(i * 50).show();
-//                item.delay(i * 50).fadeIn("fast");
-                animations.push(item);
+                var image = $("#ringImgTemplate").clone();
+                image.removeClass("template");
+                image.addClass("img-circle");
+                image.attr("id", "profileImg_"+members[i]['id']);
+                image.attr("src", members[i]['profile_image']);
+                image.css('top', topOffset + 'px');
+                image.css('left', leftOffset + 'px');
+                $("#ringDisplay").append(image);
+                image.hide();
+                animations.push(image);
             }
 
             doQueuedAnimations(animations, 500 / animations.length);
@@ -67,33 +78,29 @@ $(function() {
         }
     });
 
-/*
-    $.post("getRingData.php", data, function(data) {
-        console.log("success");
-        var members = JSON.parse(data);
-        var y = 0;
-        var x = 0;
-        // foreach member in members
-       for (i = 0; i < members.length; i++) {
-           var item = $("#ringDisplay > .template").clone();
-           item.removeClass("template");
-           item.addClass("img-circle");
-           item.attr("src", members[i])
-           item.offset({top:y, left:x});
-           $("#ringDisplay").append(item);
-           //item.hide();
-           //item.fadeIn("slow");
-       }
+    $('#ringName').change(function() {
+        $('#saveButton').addClass('btn-success').removeAttr('disabled');
     });
-*/
 });
 
 function doQueuedAnimations(animations, speed) {
-    speed = speed>>0;
+    speed |= 0;   // Truncate all digits after the decimal point
     if (animations.length > 0) {
         animations.shift().fadeIn(speed, function() {
             doQueuedAnimations(animations, speed);
         });
     }
-    console.log(speed);
+//    console.log(speed);
+}
+
+function getCookie(name) {
+    var parts = document.cookie.split(name + '=');
+    if (parts.length == 2) {
+        return parts.pop().split(';').shift();
+    }
+    return false;
+}
+
+function removeMember(id) {
+    console.log("Removing person " + id + ".");
 }
