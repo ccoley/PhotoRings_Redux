@@ -83,11 +83,11 @@ if ($_POST['action'] == 'login') {
                 </div>
 
                 <div class="tab-pane fade" id="create">
-                    <div id="firstError"><p id="firstp"></p></div>
+                    <div class="alert alert-danger" style="display:none;" id="firstError">You must enter a first name to use PhotoRings.</div>
                     <div class="alert alert-danger" style="display:none;" id="lastError">You must enter a last name to use PhotoRings.</div>
                     <div class="alert alert-danger" style="display:none;" id="emailError">You must enter a valid email address to use PhotoRings.</div>
                     <div class="alert alert-danger" style="display:none;" id="passwordError">You must enter a password with 8 or more characters.</div>
-                    <div class="alert alert-danger" style="display:none;" id="birthError">You must enter a date-of-birth, and you must be 18 or older to use PhotoRings.</div>
+                    <div class="alert alert-danger" style="display:none;" id="birthdateError">You must enter a date-of-birth, and you must be 18 or older to use PhotoRings.</div>
 
                     <form name="registerForm" class="form-horizontal" action="login.php" method="POST" role="form">
                         <input type="hidden" name="action" value="register">
@@ -123,7 +123,7 @@ if ($_POST['action'] == 'login') {
                         </div>
                         <div class="form-group">
                             <div class="col-md-offset-2 col-md-10">
-                                <button id="csubmit" type="submit" class="btn btn-warning">Create Account</button>
+                                <button id="createSubmit" type="submit" class="btn btn-warning" disabled="disabled">Create Account</button>
                             </div>
                         </div>
                     </form>

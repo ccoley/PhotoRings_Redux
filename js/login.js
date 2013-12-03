@@ -11,18 +11,15 @@ function validateFName() {
 
     var first = document.forms["registerForm"]["firstName"].value;
     if (first.toString() == "") {
-        valid = false;
         el.className = "form-group has-error";
-        var err = document.getElementById("firstError");
-        var ferr = document.getElementById("firstp");
-        err.className = "alert alert-danger";
-        ferr.innerHTML("You must enter a first name to use PhotoRings");
-    }
-    else {
+        document.getElementById("firstError").style.display = "block";
+        firstName = false;
+    } else {
         el.className = "form-group has-success";
+        document.getElementById("firstError").style.display = "none";
         firstName = true;
-        validCheck();
     }
+    validCheck();
 }
 
 // Checks to see if a last name has been entered.
@@ -31,57 +28,56 @@ function validateLName() {
 
     var last  = document.forms["registerForm"]["lastName"].value;
     if (last.toString() == "") {
-        valid = false;
         el.className = "form-group has-error";
-    }
-    else {
+        document.getElementById("lastError").style.display = "block";
+        lastName = false;
+    } else {
         el.className = "form-group has-success";
+        document.getElementById("lastError").style.display = "none";
         lastName = true;
-        validCheck();
     }
+    validCheck();
 }
 
 // this function checks for email validity.
+// TODO: use a regular expression to do better email validation
 function validateEmail() {
-    var email = document.forms["registerForm"]["email"].value;
+    var address = document.forms["registerForm"]["email"].value;
     var el = document.getElementById("cemail");
 
-// Check for email validity.
-    var atpos = email.indexOf("@");
-    var dotpos = email.lastIndexOf(".");
+    // Check for email validity.
+    var atPos = address.indexOf("@");
+    var dotPos = address.lastIndexOf(".");
 
-    if (atpos < 1 || dotpos < atpos + 2 || dotpos + 2 >= email.length) {
-        valid = false;
+    if (atPos < 1 || dotPos < atPos + 2 || dotPos + 2 >= address.length) {
         el.className = "form-group has-error";
-    }
-    else {
+        document.getElementById("emailError").style.display = "block";
+        email = false;
+    } else {
         el.className = "form-group has-success";
+        document.getElementById("emailError").style.display = "none";
         email = true;
-        validCheck();
     }
+    validCheck();
 }
 
 // This function makes sure that user inputs a valid password.
 // user must have password of 8 characters or more.
+// TODO: make the minimum password requirements stronger
 function validatePassword() {
     var pass  = document.forms["registerForm"]["password"].value;
     var el = document.getElementById("cpassword");
 
-    if (pass.toString() == "") {
-        valid = false;
-        el.className = "form-group has-error";
-    }
     if (pass.toString().length < 8) {
         el.className = "form-group has-error";
-        // alert("Password must be at least 8 characters in length");
-    }
-    else {
+        document.getElementById("passwordError").style.display = "block";
+        password = false;
+    } else {
         el.className = "form-group has-success";
+        document.getElementById("passwordError").style.display = "none";
         password = true;
-        validCheck();
     }
-
-
+    validCheck();
 }
 
 // This function checks to see if a birthdate was entered.
@@ -91,21 +87,18 @@ function validateBirthdate() {
 
     var birth = document.forms["registerForm"]["birthdate"].value;
     if (birth.toString() == "") {
-        valid = false;
         el.className = "form-group has-error";
-    }
-    else {
+        document.getElementById("birthdateError").style.display = "block";
+        birthdate = false;
+    } else {
         el.className = "form-group has-success";
+        document.getElementById("birthdateError").style.display = "none";
         birthdate = true;
-        validCheck();
     }
+    validCheck();
 }
 
 // This function makes the create account button clickable when all values have been validated.
 function validCheck() {
-    if (firstName && lastName && email && password && birthdate) {
-        var button = document.getElementById("csubmit");
-        button.className = "";
-        button.className = "btn btn-warning btn-default";
-    }
+    document.getElementById("createSubmit").disabled = !(firstName && lastName && email && password && birthdate);
 }
