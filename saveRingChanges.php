@@ -16,24 +16,19 @@ if (isset($_REQUEST['ring']) && isset($_REQUEST['user']) && isset($_REQUEST['mem
     }
 
     $oldMembers = $ring->getMemberIds();
-//    $modifiedMembers = json_decode($_REQUEST['members'], true);
     $modifiedMembers = $_REQUEST['members'];
-//    print_r($modifiedMembers);
     $return .= "\nMembers:\n" . json_encode($oldMembers) . "\n-----------------------------";
     $return .= "\nModified Members:\n" . json_encode($modifiedMembers) . "\n-----------------------------";
 
-//    echo $modifiedMembers;
     // Update the member list, if necessary
     foreach ($modifiedMembers as $id=>$val) {
         $val = strtolower($val);
-//        $id = (int)$id;
         $id = strval($id);
-        $return .= "\nID: $id\t\tVAL: $val\t\tBOOL: " . ($val == 'true') . "\t\tIN_ARRAY: " . in_array($id, $oldMembers);
+//        $return .= "\nID: $id\t\tVAL: $val\t\tBOOL: " . ($val == 'true') . "\t\tIN_ARRAY: " . in_array($id, $oldMembers);
         if ($val == 'true' && !in_array($id, $oldMembers)) {
             $ring->addMember($id);
         } elseif ($val == 'false' && in_array($id, $oldMembers)) {
             $ring->removeMember($id);
-            // TODO: If ring is spanning, also remove members from all the user's other rings
         }
     }
 
@@ -52,10 +47,8 @@ if (isset($_REQUEST['ring']) && isset($_REQUEST['user']) && isset($_REQUEST['mem
     } else {
         $return .= "\n" . ($temp ? "Saved" : "Not Saved");
     }
-//    $return .= "\n" . ($temp[0] ? "Saved\nQuery:\n$temp[1]\nValues:\n$temp[2]" : "Not Saved\nQuery:\n$temp[1]\nValues:\n$temp[2]");
+
     print json_encode($return);
-//    print json_encode($modifiedMembers);
-//    print json_encode($ring->save());
 } else {
     return false;
 }

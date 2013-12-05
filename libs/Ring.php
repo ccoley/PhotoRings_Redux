@@ -116,6 +116,7 @@ class Ring {
         $db->beginTransaction();
 
         // Save changes to the ring itself
+        // TODO: If ring is spanning, don't allow changes to the name
         if ($this->modifiedRing) {
             $query = $db->prepare("UPDATE rings SET name=? WHERE id=?");
             if (!$query->execute(array($this->name, $this->id))) {
@@ -141,6 +142,7 @@ class Ring {
             }
 
             // IDs left in $dbMembers are members who need to be deleted from the DB
+            // TODO: If ring is spanning, also remove members from all the user's other rings
             if (count($dbMembers) > 0) {
                 $placeHolder = implode(',', array_fill(0, count($dbMembers), '?'));
                 $query = $db->prepare("DELETE FROM ring_members WHERE ring_id=? AND user_id IN ($placeHolder)");
@@ -153,6 +155,7 @@ class Ring {
             }
 
             // IDs left in $localMembers are members who need to be added to the DB
+            // TODO: If ring is not spanning, also add new members to the user's spanning ring
             if (count($localMembers) > 0) {
                 $placeHolder = implode(',', array_fill(0, count($localMembers), "(?,?)"));
                 $query = $db->prepare("INSERT INTO ring_members (ring_id, user_id) VALUES " . $placeHolder);
