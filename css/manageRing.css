@@ -24,51 +24,49 @@ body {
     /*max-width: 970px;*/
 }
 
-.row {
+.page-header {
+    margin-top: 0;
     margin-bottom: 15px;
 }
 
-.page-header {
-    margin-top: 0;
+.panel {
+    margin-bottom: 15px;
+}
+
+.panel-title {
+    font-weight: bolder;
+}
+
+.row {
+    padding: 0 7.5px;
+    margin-bottom: 0;
+}
+
+.row > div[class^='col-'] {
+    padding: 0 7.5px;
 }
 
 .template {
     display: none;
 }
 
-#rightColumn {
-    padding-right: 0;
+#memberList {
+    height: 530px;
 }
 
-#rightColumn > .panel {
-    height: 716px;
+#memberList > div.panel-body {
+    padding: 5px 0;
+    height: 487px;
+    overflow-y: auto;
 }
 
-.ring-box {
-    padding-left: 20px;
-    padding-right: 20px;
+#memberList hr {
+    border-color: #FFB000;
+    margin: 10px 5px;
 }
 
-.img-ring {
-    position: relative;
-    /*background-color: #FFB000;*/
-    height: 200px;
-    width: 200px;
-    border: 1px dashed #FFB000;
-    border-radius: 4px;
-}
-
-.img-ring > p {
-    line-height: 200px;
-    width: 100%;
-}
-
-.img-ring > img {
-    height: 64px;
-    width: 64px;
-    margin-top: -32px;
-    margin-left: -32px;
-    position: absolute;
+#memberList ul {
+    margin-bottom: 0;
 }
 
 #ringDisplay {
@@ -78,7 +76,6 @@ body {
 
 #ringDisplay > p {
     line-height: 500px;
-    /*width: 100%;*/
 }
 
 #ringDisplay > img {
@@ -89,30 +86,29 @@ body {
     margin-left: -32px;
 }
 
-#outerCircle {
-    position: absolute;
-    height: 200px;
-    width: 200px;
-    border: 1px solid red;
-    border-radius: 200px;
-    z-index: 2;
+.member-list-item {
+    cursor: default;
 }
 
-#innerCircle {
-    position: absolute;
-    height: 74px;
-    width: 74px;
-    top: 63px;
-    left: 63px;
-    border: 1px solid red;
-    border-radius: 200px;
-    z-index: 2;
+.member-list-item:hover {
+    background-color: rgba(255, 176, 0, 0.2);
 }
 
 .member-list-item > p {
-    margin-bottom: 5px;
+    margin-bottom: 0;
+    padding: 2px 0;
+    font-weight: bold;
 }
 
-.member-list-item > p > i {
-    width: 1em;
+.member-list-item > p > button {
+    margin-left: 5px;
+    margin-right: 5px;
+}
+
+#saveButton {
+    height: 119px;
+}
+
+.form-control-static {
+    margin-bottom: 7px;
 }
