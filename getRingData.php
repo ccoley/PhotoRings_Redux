@@ -2,7 +2,6 @@
 require_once 'libs/PhotoRings_DB.php';
 require_once 'libs/Ring.php';
 require_once 'libs/Config.php';
-require_once 'libs/Profile.php';
 
 if (isset($_REQUEST['ring']) && isset($_REQUEST['user'])) {
     $ringID = intval($_REQUEST['ring']);
@@ -25,7 +24,6 @@ if (isset($_REQUEST['ring']) && isset($_REQUEST['user'])) {
     $config = new Config();
     $people = array('members'=>array(), 'otherFriends'=>array());
 
-//    $db = new PhotoRings_DB();
     $query = $db->prepare("SELECT profile_image, fname, lname FROM users WHERE id=?");
     foreach ($memberIds as $id) {
         $query->execute(array($id));

@@ -91,7 +91,8 @@ if (isset($_GET['ring'])) {
                     <div class="panel panel-default">
                         <div class="panel-heading"><h3 class="panel-title">Ring Settings</h3></div>
                         <div class="panel-body">
-                            <form class="form-horizontal" role="form" action="manageRing.php" method="post">
+<!--                            <form class="form-horizontal" role="form" action="manageRing.php" method="post">-->
+                            <form class="form-horizontal">
                                 <input type="hidden" name="action" value="updateRing">
                                 <div class="form-group">
                                     <label for="ringName" class="col-md-2 control-label">Ring Name</label>
@@ -100,7 +101,7 @@ if (isset($_GET['ring'])) {
                                         if ($ring->isSpanning()) {
                                             echo '<p class="form-control-static">'.$ring->getName().'</p>';
                                         } else {
-                                            echo '<input type="text" class="form-control" id="ringName" name="ringName" placeholder="'.$ring->getName().'">';
+                                            echo '<input type="text" class="form-control" id="ringName" name="ringName" value="'.$ring->getName().'">';
                                         }
                                         ?>
                                     </div>
@@ -110,7 +111,7 @@ if (isset($_GET['ring'])) {
                     </div>
                 </div>
                 <div class="col-lg-3">
-                    <button id="saveButton" type="button" class="btn btn-lg btn-block" disabled="disabled">Save Changes</button>
+                    <button id="saveButton" type="button" class="btn btn-lg btn-block" onclick="saveChanges()" disabled="disabled">Save Changes</button>
                 </div>
             </div>
         </div>

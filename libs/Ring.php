@@ -130,7 +130,7 @@ class Ring {
 
             $query = $db->prepare("SELECT user_id FROM ring_members WHERE ring_id=?");
             $query->execute(array($this->id));
-            $dbMembers = $query->fetchAll(PDO::FETCH_NUM);
+            $dbMembers = $query->fetchAll(PDO::FETCH_COLUMN, 0);
 
             // If a member exists in both arrays, we don't need to add or remove it, so unset it in both arrays
             foreach ($dbMembers as $index1 => $member) {
@@ -141,19 +141,35 @@ class Ring {
             }
 
             // IDs left in $dbMembers are members who need to be deleted from the DB
-            $placeHolder = implode(',', array_fill(0, count($dbMembers), '?'));
-            $query = $db->prepare("DELETE FROM ring_members WHERE user_id IN ($placeHolder)");
-            if (!$query->execute(array($dbMembers))) {
-                $db->rollBack();
-                return false;
+            if (count($dbMembers) > 0) {
+                $placeHolder = implode(',', array_fill(0, count($dbMembers), '?'));
+                $query = $db->prepare("DELETE FROM ring_members WHERE ring_id=? AND user_id IN ($placeHolder)");
+                $qString = $query->queryString;
+                if (!$query->execute(array_merge(array($this->id), $dbMembers))) {
+                    $db->rollBack();
+//                    return false;
+                    return array(false, $qString, implode(',', $dbMembers));
+                }
             }
 
             // IDs left in $localMembers are members who need to be added to the DB
-            $placeHolder = implode('', array_fill(0, count($localMembers), "$this->id,?),("));
-            $query = $db->prepare("INSERT INTO ring_members (ring_id, user_id) VALUES ($placeHolder)");
-            if (!$query->execute(array($localMembers))) {
-                $db->rollBack();
-                return false;
+            if (count($localMembers) > 0) {
+                $placeHolder = implode(',', array_fill(0, count($localMembers), "(?,?)"));
+                $query = $db->prepare("INSERT INTO ring_members (ring_id, user_id) VALUES " . $placeHolder);
+                $qString = $query->queryString;
+
+                // Build a new array with the ring ID as every other value
+                $execArray = array();
+                foreach($localMembers as $member) {
+                    $execArray[] = $this->id;
+                    $execArray[] = $member;
+                }
+
+                if (!$query->execute($execArray)) {
+                    $db->rollBack();
+//                    return false;
+                    return array(false, $qString, implode(',', $localMembers));
+                }
             }
         }
 
@@ -191,6 +207,7 @@ class Ring {
         }
 
         $db->commit();
-        return true;
+//        return true;
+        return array(true, "", array());
     }
 }

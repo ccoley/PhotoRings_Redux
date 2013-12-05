@@ -1,6 +1,13 @@
+// Globals
+var originalList = {}, modifiedList = {};
+var originalListString = null;
+var originalName = null;
+var ringID = null;
+
 $(function() {
     var urlVars = location.search.substring(1).split('&');
-    var data = {ring:urlVars[0].split('=')[1],
+    ringID = urlVars[0].split('=')[1];
+    var data = {ring: ringID,
                 user: getCookie('userId')};
 
     // Make the ringDisplay a square
@@ -8,36 +15,48 @@ $(function() {
 
 //    console.log(data);
 
+    // Store the original ring name.
+    originalName = $('#ringName').val();
+
     $.ajax({
         type: "POST",
         url: "getRingData.php",
         data: data,
         dataType: 'json',
         success: function(data) {
-            console.log("Success");
+//            console.log("Success");
             console.log(data);
-            console.log(data['members']);
+//            console.log(data['members']);
 
-            var members = data['members'];
-            var otherFriends = data['otherFriends'];
+            members         = data['members'];
+            others          = data['otherFriends'];
+            localMembers    = members.slice(0);
+            localOthers     = others.slice(0);
 
             for (var i = 0; i < members.length; i++) {
+                var index = members[i]['id'];
+                originalList[index] = true;
+                modifiedList[index] = true;
                 var memberItem = $("#memberTemplate").clone();
                 memberItem.removeClass('template');
                 memberItem.addClass('member-list-item');
                 memberItem.attr('id', 'person_'+members[i]['id']);
-                memberItem.find('i').attr('onclick', 'removeMember('+members[i]['id']+')');
+                memberItem.find('button').attr('onclick', 'removeMember('+members[i]['id']+')');
                 memberItem.find('p').append(members[i]['name']);
                 $("#members").append(memberItem);
             }
 
-            for (var i = 0; i < otherFriends.length; i++) {
-                var otherFriendItem = $("#otherFriendTemplate").clone();
-                otherFriendItem.removeClass('template');
-                otherFriendItem.addClass('member-list-item');
-                otherFriendItem.attr('id', 'person_'+otherFriends[i]['id']);
-                otherFriendItem.find('p').append(otherFriends[i]['name']);
-                $("#otherFriends").append(otherFriendItem);
+            for (var i = 0; i < others.length; i++) {
+                var index = others[i]['id'];
+                originalList[index] = false;
+                modifiedList[index] = false;
+                var otherItem = $("#otherFriendTemplate").clone();
+                otherItem.removeClass('template');
+                otherItem.addClass('member-list-item');
+                otherItem.attr('id', 'person_'+others[i]['id']);
+                otherItem.find('button').attr('onclick', 'addMember('+others[i]['id']+')');
+                otherItem.find('p').append(others[i]['name']);
+                $("#otherFriends").append(otherItem);
             }
 
             $("#ringDisplay > p").text(members.length + " Members");
@@ -70,16 +89,14 @@ $(function() {
                 animations.push(image);
             }
 
+            // Finish up
+            finishInitializingThePage();
             doQueuedAnimations(animations, 500 / animations.length);
         },
         error: function(data) {
             console.log("ERROR");
             console.log(data);
         }
-    });
-
-    $('#ringName').change(function() {
-        $('#saveButton').addClass('btn-success').removeAttr('disabled');
     });
 });
 
@@ -103,4 +120,95 @@ function getCookie(name) {
 
 function removeMember(id) {
     console.log("Removing person " + id + ".");
+    var member = $('#person_'+id);
+
+    // Remove from the members list
+    member.detach();
+
+    // Alter the necessary classes
+    member.find('button').attr('onclick', 'addMember('+id+')');
+    member.find('i').removeClass('fa-minus').addClass('fa-plus');
+
+    // Add to the otherFriends list
+    $('#otherFriends').append(member);
+
+    // Check if changes need to be saved
+//    console.log(modifiedList[id]);
+    updateMemberList(id);
+//    console.log(modifiedList[id]);
+    needToSave();
+}
+
+function addMember(id) {
+    console.log("Adding person " + id + ".");
+    var member = $('#person_'+id);
+
+    // Remove from the members list
+    member.detach();
+
+    // Alter the necessary classes
+    member.find('button').attr('onclick', 'removeMember('+id+')');
+    member.find('i').removeClass('fa-plus').addClass('fa-minus');
+
+    // Add to the otherFriends list
+    $('#members').append(member);
+
+    // Check if changes need to be saved
+//    console.log(modifiedList[id]);
+    updateMemberList(id);
+//    console.log(modifiedList[id]);
+    needToSave();
+}
+
+function saveChanges() {
+    // Make sure we actually need to save
+    if (needToSave()) {
+        console.log("Saving...");
+        // TODO
+        var newData = { ring: ringID,
+                        user: getCookie('userId'),
+//                        members: JSON.stringify(modifiedList),
+                        members: modifiedList,
+                        name: $('#ringName').val()};
+
+        $.ajax({
+            type: "POST",
+            url: "saveRingChanges.php",
+            data: newData,
+            dataType: 'json',
+            success: function(data) {
+                console.log("Success");
+                console.log(data);
+            },
+            error: function(data) {
+                console.log("ERROR");
+                console.log(data);
+            }
+        });
+    }
+}
+
+function needToSave() {
+    // Enable or Disable the button
+    if (originalListString !== JSON.stringify(modifiedList) || $('#ringName').val() != originalName) {
+        $('#saveButton').addClass('btn-warning').removeAttr('disabled');
+        return true;
+    } else {
+        $('#saveButton').removeClass('btn-warning').attr('disabled', 'disabled');
+        return false;
+    }
+}
+
+function updateMemberList(id) {
+    modifiedList[id] = !modifiedList[id];
+}
+
+function finishInitializingThePage(){
+    // Stringify the orignialList so we don't have to re-stringify it every time we check if we need to save
+    originalListString = JSON.stringify(originalList);
+
+    // Bind needToSave() to the onChange state of the ring name form
+    $('#ringName').change(function() {
+        needToSave();
+    });
 }
