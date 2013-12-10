@@ -23,13 +23,6 @@ if (isset($_GET['ring'])) {
     if ($result) {
         $ring = new Ring();
         $ring->buildFromId($result);
-
-        // Get the ID and name of every member of this ring
-        $memberIds = $ring->getMemberIds();
-        $placeHolder = implode(',', array_fill(0, count($memberIds), '?'));
-        $query = $db->prepare("SELECT id, fname, lname, profile_image FROM users WHERE id IN ($placeHolder)");
-        $query->execute($memberIds);
-        $members = $query->fetchAll(PDO::FETCH_ASSOC);
     } else {
         // Either ringId doesn't exist, or it isn't owned by the user trying to access it
         // TODO show an error
@@ -91,7 +84,6 @@ if (isset($_GET['ring'])) {
                     <div class="panel panel-default">
                         <div class="panel-heading"><h3 class="panel-title">Ring Settings</h3></div>
                         <div class="panel-body">
-<!--                            <form class="form-horizontal" role="form" action="manageRing.php" method="post">-->
                             <form class="form-horizontal">
                                 <input type="hidden" name="action" value="updateRing">
                                 <div class="form-group">
