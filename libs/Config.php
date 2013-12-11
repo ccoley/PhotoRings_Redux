@@ -48,7 +48,7 @@ class Config {
         return $this->documentRoot . $this->baseRequestUrl . $this->imgDir . "/";
     }
 
-    public function getImgUrl($userId, $fileName, $fullSize) {
+    public function getImgUrl($userId, $fileName, $fullSize = false) {
         $sizeDir = $fullSize ? $this->originalImgDir : $this->resizedImgDir;
         return "//" . $this->httpHost . $this->baseRequestUrl . $this->imgDir . "/" . $userId . $sizeDir . "/" . $fileName;
     }

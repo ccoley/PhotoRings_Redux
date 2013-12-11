@@ -27,6 +27,21 @@ class Profile {
         $this->privilege    = $results[0]['privilege'];
     }
 
+    public function buildFromId($id) {
+        $db = new PhotoRings_DB();
+        $query = $db->prepare("SELECT * FROM users WHERE id=?");
+        $query->execute(array($id));
+        $results = $query->fetchAll(PDO::FETCH_ASSOC);
+
+        $this->id           = $results[0]['id'];
+        $this->username     = $results[0]['email'];
+        $this->firstName    = $results[0]['fname'];
+        $this->lastName     = $results[0]['lname'];
+        $this->dob          = $results[0]['birthdate'];
+        $this->picture      = $results[0]['profile_image'];
+        $this->privilege    = $results[0]['privilege'];
+    }
+
     public function getId() {
         return $this->id;
     }
@@ -142,6 +157,26 @@ class Profile {
             $query = $db->prepare("SELECT id FROM rings WHERE owner_id=? ORDER BY spanning DESC, id");
         } else {
             $query = $db->prepare("SELECT id FROM rings WHERE (owner_id=? AND spanning=FALSE) ORDER BY id");
+        }
+        $query->execute(array($this->id));
+        $results = $query->fetchAll(PDO::FETCH_COLUMN, 0);
+
+        return $results;
+    }
+
+    /**
+     * This method returns the array of names for all rings owned by this profile.
+     * If the `spanning` ring is included, it will be the first name in the array.
+     *
+     * @param bool $withSpanningRing Should the returned array include the `spanning` ring?
+     * @return array An array of names for all the user's rings
+     */
+    public function getRingNames($withSpanningRing = false) {
+        $db = new PhotoRings_DB();
+        if ($withSpanningRing) {
+            $query = $db->prepare("SELECT name FROM rings WHERE owner_id=? ORDER BY spanning DESC, id");
+        } else {
+            $query = $db->prepare("SELECT name FROM rings WHERE (owner_id=? AND spanning=FALSE) ORDER BY id");
         }
         $query->execute(array($this->id));
         $results = $query->fetchAll(PDO::FETCH_COLUMN, 0);

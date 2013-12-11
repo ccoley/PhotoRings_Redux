@@ -1,0 +1,66 @@
+/* Dark Purple:     #371E4D     rgb(55,30,77) */
+/* Medium Purple:   #603588     rgb(96,53,136) */
+/* Light Purple:    #894CC3     rgb(137,76,195) */
+/* Light Orange:    #FFB000     rgb(255,176,0) */
+
+body {
+    background: url("../images/bg_circles.jpg") repeat;
+}
+
+.white-text {
+    color: #f8f8f8;
+}
+
+.orange-text {
+    color: #FFB000;
+}
+
+.orange-border {
+    border-color: #FFB000;
+}
+
+.container {
+    font-weight: bold;
+    /*max-width: 970px;*/
+}
+
+.page-header {
+    margin-top: 0;
+}
+
+.clear {
+    clear: both;
+}
+
+.image-grid {
+    display: block;
+    padding: 0;
+}
+
+#tabBar>li>a{
+    color: #666;
+}
+
+#tabBar > li.active > a, #tabBar > li.active > a:hover {
+    color: #FFB000;
+    background-color: #371E4D;
+}
+
+#tabBar > li > a:hover {
+    background-color: #E6E6E6;
+}
+
+#tabBar > li.text > a:hover {
+    background-color: inherit;
+    cursor: default;
+}
+
+.photo-box {
+    display: inline-block;
+    width: 210px;
+    height: 210px;
+    margin: 5px 5px 0;
+    border: 2px solid #999;
+    background-position: center center;
+    background-size: cover;
+}
