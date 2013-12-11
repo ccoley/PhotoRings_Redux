@@ -42,7 +42,7 @@ $spanningRingId = array_shift($rings);
                 <h1>All Your Rings</h1>
             </div>
             <!-- All Friends Ring -->
-            <div class="panel main-ring">
+            <div class="panel main-ring text-center">
                 <a class="col-lg-12 btn ring-box" href="manageRing.php?ring=<? echo $spanningRingId; ?>">
                     <div class="spanning-ring">
                         <?
@@ -71,7 +71,7 @@ $spanningRingId = array_shift($rings);
                         $theta = M_PI_2;
                         foreach ($friendProfiles as $id=>$profileImage) {
                             $top  = 200 - (200 - 32) * sin($theta);
-                            $left = 400 + (400 - 32) * cos($theta);
+                            $left = 350 + (350 - 32) * cos($theta);
                             $src = $config->getProfileImgUrl($id, $profileImage['image']);
                             echo "<img class='img-circle' src='$src' title='".$profileImage['name']."' style='top:".$top."px; left:".$left."px;'>";
                             $theta += $interval;

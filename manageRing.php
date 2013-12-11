@@ -56,14 +56,14 @@ if (isset($_GET['ring'])) {
                 <h1><? echo $ring->getName(); ?></h1>
             </div>
             <div class="row">
-                <div class="col-lg-9">
+                <div class="col-md-9 col-lg-9">
                     <!-- Ring Display -->
                     <div id="ringDisplay" class="panel panel-default text-center">
                         <img id="ringImgTemplate" class='template' src='' style=''>
                         <p class="h1"></p>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-md-3 col-lg-3">
                     <!-- Member List -->
                     <div id="memberList" class="panel panel-default">
                         <div class="panel-heading"><h3 class="panel-title">Members</h3></div>
@@ -80,7 +80,7 @@ if (isset($_GET['ring'])) {
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-9">
+                <div class="col-md-9 col-lg-9">
                     <div class="panel panel-default">
                         <div class="panel-heading"><h3 class="panel-title">Ring Settings</h3></div>
                         <div class="panel-body">
@@ -102,7 +102,7 @@ if (isset($_GET['ring'])) {
                         </div>
                     </div>
                 </div>
-                <div class="col-lg-3">
+                <div class="col-md-3 col-lg-3">
                     <button id="saveButton" type="button" class="btn btn-lg btn-block" onclick="saveChanges()" disabled="disabled">Save Changes</button>
                 </div>
             </div>
