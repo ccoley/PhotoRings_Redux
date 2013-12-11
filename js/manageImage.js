@@ -65,7 +65,7 @@ function saveChanges(imageId) {
             success: function(data) {
                 console.log("Success");
                 console.log(data);
-//                location.reload();
+                location.reload();
             },
             error: function(data) {
                 console.log("ERROR");
