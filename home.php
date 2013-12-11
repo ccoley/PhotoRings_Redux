@@ -30,49 +30,80 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
     <!-- Main page content -->
     <div class="main">
         <div class="container">
-            <?php
-                $config = new Config();
-				$profile = new Profile();
-				$profile->buildFromUsername($_SESSION['username']);
-				
-				try {
-					$dbo = new PhotoRings_DB();				
-				}
-				catch (PDOException $e) {
-					return false;
-				}
-				
-				$query = $dbo->prepare("SELECT * FROM images WHERE owner_id = ?");				
-				
-				if($query != false) {
-					$profileId = $profile->getId();
-					if ($query->execute(array($profileId))) {
-                        $images = $query->fetchAll(PDO::FETCH_ASSOC);
-                        if (count($images) > 0) {
-                            foreach($images as $image) {
-                                $ratio = filesize('user_images/'.$profileId.'/original/'.$image['file_name']) / filesize('user_images/'.$profileId.'/resized/'.$image['file_name']);
-                                echo    "<div class=\"row panel post-box\">"
-                                    .       "<div class=\"col-md-6 post-img\">"
-                                    .           "<h4 class='text-center'>Original</h4>"
-                                    .           "<img class=\"img-rounded img-responsive\" src=\"" . $config->getImgUrl($profileId, $image['file_name'], true) . "\">"
-                                    .           "<p class='text-center'>".round(filesize('user_images/'.$profileId.'/original/'.$image['file_name'])/1024, 2)."K</p>"
-                                    .       "</div>"
-                                    .       "<div class=\"col-md-6 post-img\">"
-                                    .           "<h4 class='text-center'>Resized @ 90% Quality</h4>"
-                                    .           "<img class=\"img-rounded img-responsive\" src=\"" . $config->getImgUrl($profileId, $image['file_name'], false) . "\">"
-                                    .           "<p class='text-center'>".round(filesize('user_images/'.$profileId.'/resized/'.$image['file_name'])/1024, 2)."K - ".round($ratio, 2)."x smaller</p>"
-                                    .       "</div>"
-                                    .   "</div>";
-                            }
-                        } else {
-                            echo    "<div class='row panel'>"
-                                .       "<h4 class='text-center'>No Images</h4>"
-                                .   "</div>";
-                        }
-                    }
-				}
-				
-			?>
+            <?
+            $config = new Config();
+            $profile = new Profile();
+            $profile->buildFromUsername($_SESSION['username']);
+            $profileId = $profile->getId();
+
+            $db = new PhotoRings_DB();
+            $query = $db->prepare("SELECT DISTINCT(id), owner_id, upload_date, caption, file_name FROM images INNER JOIN ring_images ON ring_images.image_id=images.id INNER JOIN ring_members ON ring_members.ring_id=ring_images.ring_id WHERE ring_members.user_id=? ORDER BY upload_date DESC");
+            $query->execute(array($profileId));
+            $images = $query->fetchAll(PDO::FETCH_ASSOC);
+
+            $ownerIds = array();
+            foreach ($images as $image) {
+                $ownerIds[] = $image['owner_id'];
+            }
+            $ownerIds = array_unique($ownerIds);
+
+            $placeHolder = implode(',', array_fill(0, count($ownerIds), '?'));
+            $query = $db->prepare("SELECT id, fname, lname, profile_image FROM users WHERE id IN ($placeHolder)");
+            $query->execute($ownerIds);
+            $owners = $query->fetchAll(PDO::FETCH_ASSOC);
+
+            $users = array();
+            foreach ($owners as $owner) {
+                $users[$owner['id']] = array('name'=>$owner['fname']." ".$owner['lname'], 'profile_image'=>$owner['profile_image']);
+            }
+
+            if (!empty($images)) {
+                foreach ($images as $image) {
+                    echo    "<div class='row panel post-box'>"
+                        .       "<div class='col-lg-6 post-img'>"
+                        .           "<img class='img-rounded img-responsive' src='".$config->getImgUrl($image['owner_id'], $image['file_name'])."'>"
+                        .       "</div>"
+                        .       "<div class='col-lg-6 post-right-side'>"
+                        .           "<div style='float:left;'>"
+                        .               "<img class='post-profile-img' src='".$config->getProfileImgUrl($image['owner_id'], $users[$image['owner_id']]['profile_image'])."'>"
+                        .               "</div>"
+                        .           "<div class='comments-box'>"
+                        .               "<span class='owner-name'>".$users[$image['owner_id']]['name']."</span>"
+                        .               "<p>".$image['caption']."</p>"
+                        .           "</div>"
+                        .       "</div>"
+                        .   "</div>";
+                }
+            } else {
+                echo    "<div class='row panel'><h4 class='text-center'>No Images</h4></div>";
+            }
+
+//            if($query != false) {
+////                $profileId = $profile->getId();
+//                if ($query->execute(array($profileId))) {
+////                    $images = $query->fetchAll(PDO::FETCH_ASSOC);
+//                    if (count($images) > 0) {
+//                        foreach($images as $image) {
+//                            $ratio = filesize('user_images/'.$profileId.'/original/'.$image['file_name']) / filesize('user_images/'.$profileId.'/resized/'.$image['file_name']);
+//                            echo    "<div class=\"row panel post-box\">"
+//                                .       "<div class=\"col-md-6 post-img\">"
+//                                .           "<h4 class='text-center'>Original</h4>"
+//                                .           "<img class=\"img-rounded img-responsive\" src=\"" . $config->getImgUrl($profileId, $image['file_name'], true) . "\">"
+//                                .           "<p class='text-center'>".round(filesize('user_images/'.$profileId.'/original/'.$image['file_name'])/1024, 2)."K</p>"
+//                                .       "</div>"
+//                                .       "<div class=\"col-md-6 post-img\">"
+//                                .           "<h4 class='text-center'>Resized @ 90% Quality</h4>"
+//                                .           "<img class=\"img-rounded img-responsive\" src=\"" . $config->getImgUrl($profileId, $image['file_name'], false) . "\">"
+//                                .           "<p class='text-center'>".round(filesize('user_images/'.$profileId.'/resized/'.$image['file_name'])/1024, 2)."K - ".round($ratio, 2)."x smaller</p>"
+//                                .       "</div>"
+//                                .   "</div>";
+//                        }
+//                    } else {
+//
+//                    }
+//                }
+//            }
+            ?>
         </div>
     </div>
 
