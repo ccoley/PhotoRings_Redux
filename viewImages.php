@@ -10,11 +10,14 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
     header("Location: index.php");
 }
 
-$profile = new Profile();
-$profile->buildFromId($_COOKIE['userId']);
-
 $config = new Config();
 $db = new PhotoRings_DB();
+
+$profile = new Profile();
+$profile->buildFromId($_COOKIE['userId']);
+$profileId = $profile->getId();
+$ringNames = $profile->getRingNames(true);
+$ringIds = $profile->getRingIds(true);
 ?>
 
 <!DOCTYPE html>
@@ -48,12 +51,11 @@ $db = new PhotoRings_DB();
                     <li><a href="#Unshared-Photos" data-toggle="tab">Unshared Photos</a></li>
                     <li class="dropdown">
                         <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            Photos Shared with <span class="caret"></span>
+                            Photos Shared with <span id='currentTab'></span> <span class="caret"></span>
                         </a>
                         <ul class="dropdown-menu">
                             <?
-                            $rings = $profile->getRingNames(true);
-                            foreach ($rings as $ring) {
+                            foreach ($ringNames as $ring) {
                                 echo "<li><a href='#".str_replace(' ','-',$ring)."-Photos' data-toggle='tab'>$ring</a></li>";
                             }
                             ?>
@@ -65,7 +67,6 @@ $db = new PhotoRings_DB();
                 <div id="tabContent" class="tab-content text-center">
                     <div class="tab-pane active" id="All-Photos">
                         <?
-                        $profileId = $profile->getId();
                         $query = $db->prepare("SELECT id, file_name FROM images WHERE owner_id=?");
                         $query->execute(array($profileId));
                         $allPhotos = $query->fetchAll(PDO::FETCH_ASSOC);
@@ -77,17 +78,33 @@ $db = new PhotoRings_DB();
                         ?>
                     </div>
                     <div class="tab-pane" id="Unshared-Photos">
-                        <img class="img-rounded" src="images/debug/natalie1.jpg" alt=""/>
+                        <?
+                        $query = $db->prepare("SELECT id, file_name FROM images LEFT OUTER JOIN ring_images ON images.id=ring_images.image_id WHERE images.owner_id=? AND ring_images.image_id IS NULL");
+                        $query->execute(array($profileId));
+                        $sharedPhotos = $query->fetchAll(PDO::FETCH_ASSOC);
+
+                        foreach ($sharedPhotos as $photo) {
+                            $src = $config->getImgUrl($profileId, $photo['file_name']);
+                            echo "<a class='photo-box' style='background-image: url(".$src.");' href='manageImage.php?user=".$profileId."&img=".$photo['file_name']."'></a>";
+                        }
+                        ?>
                     </div>
                     <?
-                    foreach ($rings as $ring) {
+                    $query = $db->prepare("SELECT id, file_name FROM images LEFT JOIN ring_images ON images.id=ring_images.image_id WHERE images.owner_id=? AND ring_images.ring_id=?");
+                    foreach ($ringNames as $key=>$ring) {
                         echo "<div class='tab-pane' id='".str_replace(' ','-',$ring)."-Photos'>";
-                        echo "<img class='img-rounded' src='images/debug/natalie5.jpg' alt=''/>";
-                        // TODO: Fill in the images
+
+                        $query->execute(array($profileId, $ringIds[$key]));
+                        $ringPhotos = $query->fetchAll(PDO::FETCH_ASSOC);
+
+                        foreach ($ringPhotos as $photo) {
+                            $src = $config->getImgUrl($profileId, $photo['file_name']);
+                            echo "<a class='photo-box' style='background-image: url(".$src.");' href='manageImage.php?user=".$profileId."&img=".$photo['file_name']."'></a>";
+                        }
+
                         echo "</div>";
                     }
                     ?>
-                    <br class="clear" />
                 </div>
             </div>
         </div>
@@ -96,6 +113,6 @@ $db = new PhotoRings_DB();
     <!-- Get them scripts. Load them last to improve page loading speeds. -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-<!--    <script src="js/viewImages.php"></script>-->
+    <script src="js/viewImages.js"></script>
 </body>
 </html>
