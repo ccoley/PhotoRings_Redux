@@ -209,7 +209,7 @@ function finishInitializingThePage(){
     originalListString = JSON.stringify(originalList);
 
     // Bind needToSave() to the onChange state of the ring name form
-    $('#ringName').change(function() {
+    $("#ringName").bind('input', function() {
         needToSave();
     });
 }
