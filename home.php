@@ -57,13 +57,15 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
                 $users[$owner['id']] = array('name'=>$owner['fname']." ".$owner['lname'], 'profile_image'=>$owner['profile_image']);
             }
 
-            if (!empty($images)) {
+            if (count($images) > 0) {
                 foreach ($images as $image) {
                     echo    "<div class='row panel post-box'>"
-                        .       "<div class='col-lg-6 post-img'>"
-                        .           "<img class='img-rounded img-responsive' src='".$config->getImgUrl($image['owner_id'], $image['file_name'])."'>"
+                        .       "<div class='col-md-6 post-img'>"
+                        .           "<a href='".$config->getImgUrl($image['owner_id'], $image['file_name'], true)."'>"
+                        .               "<img class='img-rounded img-responsive' src='".$config->getImgUrl($image['owner_id'], $image['file_name'])."'>"
+                        .           "</a>"
                         .       "</div>"
-                        .       "<div class='col-lg-6 post-right-side'>"
+                        .       "<div class='col-md-6 post-right-side'>"
                         .           "<div style='float:left;'>"
                         .               "<img class='post-profile-img' src='".$config->getProfileImgUrl($image['owner_id'], $users[$image['owner_id']]['profile_image'])."'>"
                         .               "</div>"

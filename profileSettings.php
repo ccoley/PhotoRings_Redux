@@ -181,13 +181,13 @@ $profile->buildFromUsername($_SESSION['username']);
                             </div>
                             <? $footprint = $profile->getDiskFootprint(); ?>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Size of Original Versions</label>
+                                <label class="col-md-3 control-label">Size of Original Images</label>
                                 <div class="col-md-9">
                                     <p class="form-control-static"><? echo $footprint[0]; ?></p>
                                 </div>
                             </div>
                             <div class="form-group">
-                                <label class="col-md-3 control-label">Size of Resized Versions</label>
+                                <label class="col-md-3 control-label">Size of Resized Images</label>
                                 <div class="col-md-9">
                                     <p class="form-control-static"><? echo $footprint[1]; ?></p>
                                 </div>
