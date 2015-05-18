@@ -29,6 +29,12 @@ class UserAuth {
     var $encrypt = true;    // set to true to use SHA-256 encryption for the password
     var $hashSalt = '!!ChangeMe';
 
+	public function __construct() {
+		$config = new Config();
+
+		$this->hashSalt = $config->getAppKey();
+	}
+
     /**
      * Attempt to log in the user with the provided username and password.
      *

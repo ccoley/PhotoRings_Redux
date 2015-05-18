@@ -10,6 +10,10 @@ class Config {
         $this->settings = parse_ini_file($file, TRUE);
     }
 
+	public function getAppKey() {
+		return $this->settings['application']['key'];
+	}
+
     public function getHttpHost() {
         return $this->settings['server']['host'];
     }
