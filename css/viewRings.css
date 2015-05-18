@@ -27,14 +27,26 @@ body {
     margin-top: 0;
 }
 
-.main-ring, .other-rings {
-    /*background-color: rgba(255,255,255,0.4);*/
-    /*border-radius: 4px;*/
+#createRingBox .img-ring {
+    background: rgba(0,0,0,0.1);
+    color: #333;
 }
 
-.ring-box {
-    padding-left: 20px;
-    padding-right: 20px;
+.big-plus {
+    font-size: 100px;
+}
+
+.inner-box {
+    width: 214px;
+    margin-left: auto;
+    margin-right: auto;
+    padding: 6px;
+}
+
+.ring-label {
+    text-align: center;
+    margin-bottom: 5px;
+    font-weight: bold;
 }
 
 .img-ring {
@@ -42,8 +54,9 @@ body {
     /*background-color: #FFB000;*/
     height: 200px;
     width: 200px;
-    border: 1px dashed #FFB000;
+    border: 0px dashed #FFB000;
     border-radius: 4px;
+    padding: 0;
 }
 
 .img-ring > p {
@@ -62,7 +75,7 @@ body {
 .spanning-ring {
     position: relative;
     height: 400px;
-    width: 800px;
+    width: 700px;
     margin-left: auto;
     margin-right: auto;
 }
@@ -70,10 +83,6 @@ body {
 .spanning-ring > p {
     line-height: 400px;
     width: 100%;
-}
-
-.spanning-ring > img {
-    /*height: 64px*/
 }
 
 #outerCircle {

@@ -179,6 +179,7 @@ function saveChanges() {
             success: function(data) {
                 console.log("Success");
                 console.log(data);
+                location.reload();
             },
             error: function(data) {
                 console.log("ERROR");
@@ -208,7 +209,7 @@ function finishInitializingThePage(){
     originalListString = JSON.stringify(originalList);
 
     // Bind needToSave() to the onChange state of the ring name form
-    $('#ringName').change(function() {
+    $("#ringName").bind('input', function() {
         needToSave();
     });
 }

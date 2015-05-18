@@ -7,12 +7,6 @@
  * @author Chris Coley <chris at codingallnight dot com>
  */
 class PhotoRings_DB extends PDO {
-    // Database Setup
-    private $hostname = 'localhost';
-    private $database = 'photo_rings';
-    private $username = 'pr';
-    private $password = '5RTQrctz7feTCEcz';
-
     // PDO settings
     private $PDO_dsn;
     private $PDO_emulatePrepares = false;
@@ -25,10 +19,16 @@ class PhotoRings_DB extends PDO {
      * @throws PDOException Throws a PDOException if the attempt to connect to the database fails.
      */
     public function __construct() {
-        $this->PDO_dsn = "mysql:host=".$this->hostname.";dbname=".$this->database.";charset=utf8";
+        $settings = parse_ini_file("config.ini", TRUE);
+        $this->PDO_dsn = $settings['database']['driver']
+                        . ':host=' . $settings['database']['host']
+                        . ((!empty($settings['database']['port'])) ? (';port=' . $settings['database']['port']) : '')
+                        . ';dbname=' . $settings['database']['name']
+                        . ';charset=utf8';
+
         parent::__construct($this->PDO_dsn,
-                            $this->username,
-                            $this->password,
+                            $settings['database']['username'],
+                            $settings['database']['password'],
                             array(
                                 PDO::ATTR_EMULATE_PREPARES => $this->PDO_emulatePrepares,
                                 PDO::ATTR_ERRMODE => $this->PDO_errorMode

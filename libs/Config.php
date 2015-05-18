@@ -4,75 +4,74 @@
  * To see a pretty output of all these settings, and any errors, open ViewConfig.php in your browser.
  */
 class Config {
-    // Server config settings
-    private $httpHost       = "frame.thebrokenbinary.com:8080"; // SERVER_NAME[:SERVER_PORT]
-    private $documentRoot   = "/var/www";                       // The server's document root
-    private $baseRequestUrl = "/photorings";                    // The website's base directory
-    private $imgDir         = "/user_images";                   // User images directory, sub-directory of baseRequestUrl
-    private $originalImgDir = "/original";                      // Sub-directory that holds a user's original images
-    private $resizedImgDir  = "/resized";                       // Sub-directory that holds a user's resized images
-    private $profileImgDir  = "/profile";                       // Sub-directory that holds a user's profile images
+    private $settings;
 
-    // PEAR::Mail settings
-    private $mailHost       = "ssl://smtp.gmail.com";
-    private $mailPort       = "465";
-    private $mailUsername   = "photorings@codingallnight.com";
-    private $mailPassword   = "SO6WBA36l77T0bj";
+    public function __construct($file = "config.ini") {
+        $this->settings = parse_ini_file($file, TRUE);
+    }
 
     public function getHttpHost() {
-//        return $this->httpHost;
-        return $_SERVER['HTTP_HOST'];   // For test purposes
+        return $this->settings['server']['host'];
     }
 
     public function getDocRoot() {
-        return $this->documentRoot;
+        return $this->settings['server']['root'];
     }
 
     public function getBaseRequestUrl() {
-        return $this->baseRequestUrl;
-    }
-
-    public function getOriginalImgDir() {
-        return $this->originalImgDir . "/";
-    }
-
-    public function getResizedImgDir() {
-        return $this->resizedImgDir . "/";
-    }
-
-    public function getProfileImgDir() {
-        return $this->profileImgDir . "/";
+        return $this->settings['server']['host']. $this->settings['server']['request_uri'] . "/";
     }
 
     public function getImgUploadPath() {
-        return $this->documentRoot . $this->baseRequestUrl . $this->imgDir . "/";
+        return $this->settings['server']['root'] . $this->settings['images']['base_dir'] . "/";
     }
 
-    public function getImgUrl($userId, $fileName, $fullSize) {
-        $sizeDir = $fullSize ? $this->originalImgDir : $this->resizedImgDir;
-        return "//" . $this->httpHost . $this->baseRequestUrl . $this->imgDir . "/" . $userId . $sizeDir . "/" . $fileName;
+    public function getOriginalImgDir() {
+        return $this->settings['images']['original_dir'] . "/";
+    }
+
+    public function getResizedImgDir() {
+        return $this->settings['images']['resized_dir'] . "/";
+    }
+
+    public function getProfileImgDir() {
+        return $this->settings['images']['profile_dir'] . "/";
+    }
+
+    public function getImgUrl($userId, $fileName, $fullSize = false) {
+        $sizeDir = $fullSize ? $this->settings['images']['original_dir'] : $this->settings['images']['resized_dir'];
+        return "//" . $this->settings['server']['host'] . $this->settings['server']['request_uri']
+            . $this->settings['images']['base_dir'] . "/" . $userId . $sizeDir . "/" . $fileName;
     }
 
     public function getProfileImgUrl($userId, $fileName) {
-        return "//" . $this->httpHost . $this->baseRequestUrl . $this->imgDir . "/" . $userId . $this->profileImgDir . "/" . $fileName;
+        return "//" . $this->settings['server']['host'] . $this->settings['server']['request_uri']
+            . $this->settings['images']['base_dir'] . "/" . $userId . $this->settings['images']['profile_dir'] . "/" . $fileName;
     }
 
     public function getPEARMailSMTPParams() {
-        return array("host"=>$this->mailHost, "port"=>$this->mailPort, "auth"=>true, "username"=>$this->mailUsername, "password"=>$this->mailPassword);
+        //TODO make this function work for PHP's builtin mail() function too
+        return  array(
+                    "host"=>$this->settings['email']['host'],
+                    "port"=>$this->settings['email']['port'],
+                    "auth"=>true,
+                    "username"=>$this->settings['email']['username'],
+                    "password"=>$this->settings['email']['password']
+                );
     }
 
     public function createUserDirectories($userId) {
         $flag1 = $flag2 = $flag3 = true;
         $base =  $this->getImgUploadPath() . $userId;
 
-        if (!is_dir($base.$this->originalImgDir)) {
-            $flag1 = mkdir($base.$this->originalImgDir, 0700, true);
+        if (!is_dir($base.$this->settings['images']['original_dir'])) {
+            $flag1 = mkdir($base.$this->settings['images']['original_dir'], 0700, true);
         }
-        if (!is_dir($base.$this->resizedImgDir)) {
-            $flag2 = mkdir($base.$this->resizedImgDir, 0700, true);
+        if (!is_dir($base.$this->settings['images']['resized_dir'])) {
+            $flag2 = mkdir($base.$this->settings['images']['resized_dir'], 0700, true);
         }
-        if (!is_dir($base.$this->profileImgDir)) {
-            $flag3 = mkdir($base.$this->profileImgDir, 0700, true);
+        if (!is_dir($base.$this->settings['images']['profile_dir'])) {
+            $flag3 = mkdir($base.$this->settings['images']['profile_dir'], 0700, true);
         }
 
         return $flag1 && $flag2 && $flag3;

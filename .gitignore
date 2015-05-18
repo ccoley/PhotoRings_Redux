@@ -9,3 +9,6 @@
 
 # User Images directory
 user_images/
+
+# Server Config
+config.ini

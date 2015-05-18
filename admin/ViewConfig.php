@@ -6,7 +6,9 @@
 
 require_once('../libs/Config.php');
 
-$config = new Config();
+$config = new Config("../config.ini");
+
+//$settings = parse_ini_file("../config.ini", TRUE);
 
 
 echo "<link rel='stylesheet' href='ViewConfig.css' type='text/css'>";
@@ -20,22 +22,33 @@ echo "<tr><td>Apache User ID</td><td>" . exec('whoami') . "</td><td></td></tr>";
 
 ### HTTP Host
 $httpHost = $config->getHttpHost();
+//$httpHost = $settings['server']['host'];
 echo "<tr><td>HTTP Host</td><td>$httpHost</td><td>";
 if ($httpHost != $_SERVER['HTTP_HOST']) {
     echo "HTTP Host is misconfigured. This could cause many issues throughout the website.<br>PHP sees it as ".$_SERVER['HTTP_HOST'];
 }
 echo "</td></tr>";
 
-
-### Base directory
-$baseDir = $config->getBaseRequestUrl();
-echo "<tr><td>Base Directory</td><td>$baseDir</td><td>";
-if (!file_exists($baseDir)) {
-    echo "$baseDir does not exist";
-} elseif (!is_writable($baseDir)) {
-    echo "$baseDir is not writable";
+### Base Request URL
+$baseURL = $config->getBaseRequestUrl();
+$observedBaseURL = $_SERVER['HTTP_HOST'] . explode('admin', $_SERVER['REQUEST_URI'])[0];
+echo "<tr><td>Base Request URL</td><td>$baseURL</td><td>";
+if ($baseURL != $observedBaseURL) {
+    echo "HTTP Host is misconfigured. This could cause many issues throughout the website.<br>PHP sees it as ".$observedBaseURL;
 }
 echo "</td></tr>";
+
+
+### Base directory
+//$baseDir = $config->getBaseRequestUrl();
+//$baseDir = $settings['server']['root'];
+//echo "<tr><td>Base Directory</td><td>$baseDir</td><td>";
+//if (!file_exists($baseDir)) {
+//    echo "$baseDir does not exist";
+//} elseif (!is_writable($baseDir)) {
+//    echo "$baseDir is not writable";
+//}
+//echo "</td></tr>";
 
 
 ### Libraries Directory
@@ -47,15 +60,34 @@ echo "</td></tr>";
 //echo '</td></tr>';
 
 
-### Images Directory
-$imgDir = $config->getImgUploadPath();
-echo "<tr><td>Image Upload Directory</td><td>$imgDir</td><td>";
-if (!file_exists($imgDir)) {
-    echo "$imgDir does not exist";
-} elseif (!is_writable($imgDir)) {
-    echo "$imgDir is not writable";
+### Base Images Directory
+$baseImgDir = $config->getImgUploadPath();
+//$imgDir = $settings['server']['root'] . $settings['images']['base_dir'] . '/';
+echo "<tr><td>Image Upload Directory</td><td>$baseImgDir</td><td>";
+if (!file_exists($baseImgDir)) {
+    echo "$baseImgDir does not exist";
+} elseif (!is_writable($baseImgDir)) {
+    echo "$baseImgDir is not writable";
 }
 echo '</td></tr>';
+
+
+### User Image Directories
+$origImgDir = $config->getOriginalImgDir('XX');
+$resizedImgDir = $config->getResizedImgDir('XX');
+$profileImgDir = $config->getProfileImgDir('XX');
+echo "<tr><td>Original Image Directory</td><td>$origImgDir</td><td></td></tr>";
+echo "<tr><td>Resized Image Directory</td><td>$resizedImgDir</td><td></td></tr>";
+echo "<tr><td>Profile Image Directory</td><td>$profileImgDir</td><td></td></tr>";
+
+
+### Example Image URLs
+$fullImageURL = $config->getImgUrl('XX','example.png', TRUE);
+$resizedImageURL = $config->getImgUrl('XX', 'example.png');
+$profileImageURL = $config->getProfileImgUrl('XX', 'profile-pic.png');
+echo "<tr><td>Original Image URL</td><td>$fullImageURL</td><td></td></tr>";
+echo "<tr><td>Resized Image URL</td><td>$resizedImageURL</td><td></td></tr>";
+echo "<tr><td>Profile Image URL</td><td>$profileImageURL</td><td></td></tr>";
 
 
 ### PHP ini settings

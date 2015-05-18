@@ -3,6 +3,7 @@ require_once 'libs/UserAuth.php';
 require_once 'libs/Profile.php';
 require_once 'libs/PhotoRings_DB.php';
 require_once 'libs/Config.php';
+require_once 'libs/Ring.php';
 
 $auth = new UserAuth();
 // If the user is not logged in, redirect them to the splash page
@@ -10,10 +11,12 @@ if ($auth->isLoggedIn($_SESSION['loggedIn']) == false) {
     header("Location: index.php");
 }
 
+$config = new Config();
+
 $profile = new Profile();
 $profile->buildFromUsername($_SESSION['username']);
 $rings = $profile->getRingIds(true);
-$spanningRing = array_shift($rings);
+$spanningRingId = array_shift($rings);
 ?>
 
 <!DOCTYPE html>
@@ -35,79 +38,91 @@ $spanningRing = array_shift($rings);
     <!-- Main page content -->
     <div class="main">
         <div class="container">
-            <div class="row page-header orange-border white-text text-center">
+            <div class="page-header orange-border white-text text-center">
                 <h1>All Your Rings</h1>
             </div>
             <!-- All Friends Ring -->
-            <div class="row panel main-ring">
-                <?
-                $db = new PhotoRings_DB();
-                $query = $db->prepare("SELECT rings.name, COUNT(ring_members.user_id) FROM rings, ring_members WHERE rings.id=? AND ring_members.ring_id=?");
-                $query->execute(array($spanningRing,$spanningRing));
-                $results = $query->fetch(PDO::FETCH_NUM);
+            <div class="panel main-ring text-center">
+                <a class="col-lg-12 btn ring-box" href="manageRing.php?ring=<? echo $spanningRingId; ?>">
+                    <div class="spanning-ring">
+                        <?
+                        $spanningRing = new Ring();
+                        $spanningRing->buildFromId($spanningRingId);
+                        $allFriends = $spanningRing->getMemberIds();
 
-                /*
-                 * Trigonometric functions for the image locations where `radius` is the radius of the bounding box
-                 *
-                 * top:     radius - (radius - imgRadius)sin(theta)
-                 * left:    radius + (radius - imgRadius)cos(theta)
-                 */
+                        $db = new PhotoRings_DB();
+                        $query = $db->prepare("SELECT profile_image, fname, lname FROM users WHERE id=?");
+                        $friendProfiles = array();
+                        foreach ($allFriends as $friend) {
+                            $query->execute(array($friend));
+                            $result = $query->fetch(PDO::FETCH_NUM);
+                            $friendProfiles[$friend] = array('image'=>$result[0], 'name'=>$result[1].' '.$result[2]);
+                        }
 
-                echo    "<a class='col-md-12 btn ring-box' href='manageRing.php?ring=$spanningRing'>"
-                    .       "<div class='spanning-ring'>"
-//                    .           "<div id='outerOval'></div>"
-//                    .           "<div id='innerOval'></div>"
-                    .           "<p class='h1'>$results[0] - $results[1]</p>"
-                    .           "<img class='img-circle' src='images/debug/natalie1.jpg' style='top:32.0px; left:400.0px;'>"
-                    .           "<img class='img-circle' src='images/debug/natalie2.jpg' style='top:46.5px; left:250.3px;'>"
-                    .           "<img class='img-circle' src='images/debug/natalie3.jpg' style='top:87.6px; left:126.5px;'>"
-                    .           "<img class='img-circle' src='images/debug/natalie4.jpg' style='top:148.1px; left:50.0px;'>"
-                    .           "<img class='img-circle' src='images/debug/natalie5.jpg' style='top:217.6px; left:34.0px;'>"
-                    .           "<img class='img-circle' src='images/debug/natalie1.jpg' style='top:284.0px; left:81.3px;'>"
-                    .           "<img class='img-circle' src='images/debug/natalie2.jpg' style='top:335.9px; left:183.7px;'>"
-                    .           "<img class='img-circle' src='images/debug/natalie3.jpg' style='top:364.3px; left:323.5px;'>"
-                    .           "<img class='img-circle' src='images/debug/natalie4.jpg' style='top:364.3px; left:476.5px;'>"
-                    .           "<img class='img-circle' src='images/debug/natalie5.jpg' style='top:335.9px; left:616.3px;'>"
-                    .           "<img class='img-circle' src='images/debug/natalie1.jpg' style='top:284.0px; left:718.7px;'>"
-                    .           "<img class='img-circle' src='images/debug/natalie2.jpg' style='top:217.6px; left:766.0px;'>"
-                    .           "<img class='img-circle' src='images/debug/natalie3.jpg' style='top:148.1px; left:750.0px;'>"
-                    .           "<img class='img-circle' src='images/debug/natalie4.jpg' style='top:87.6px; left:673.5px;'>"
-                    .           "<img class='img-circle' src='images/debug/natalie5.jpg' style='top:46.5px; left:549.7px;'>"
-                    .       "</div>"
-                    .   "</a>";
-                ?>
+                        $name = $spanningRing->getName();
+                        $count = $spanningRing->getMemberCount();
+                        echo "<p class='h1'>$name - $count</p>";
+
+
+                        // Trigonometric functions for the image locations where `radius` is the radius of the bounding box
+                        // top:     radius - (radius - imgRadius)sin(theta)
+                        // left:    radius + (radius - imgRadius)cos(theta)
+                        $interval = 2*M_PI/$count;
+                        $theta = M_PI_2;
+                        foreach ($friendProfiles as $id=>$profileImage) {
+                            $top  = 200 - (200 - 32) * sin($theta);
+                            $left = 350 + (350 - 32) * cos($theta);
+                            $src = $config->getProfileImgUrl($id, $profileImage['image']);
+                            echo "<img class='img-circle' src='$src' title='".$profileImage['name']."' style='top:".$top."px; left:".$left."px;'>";
+                            $theta += $interval;
+                        }
+                        ?>
+                    </div>
+                </a>
             </div>
             <!-- Other Rings -->
-            <div class="row panel other-rings">
+            <div class="row other-rings">
                 <?
-                $db = new PhotoRings_DB();
-                $query = $db->prepare("SELECT rings.name, COUNT(ring_members.user_id) FROM rings, ring_members WHERE rings.id=? AND ring_members.ring_id=?");
-                foreach ($rings as $key=>$ringId) {
-                    $query->execute(array($ringId,$ringId));
-                    $results = $query->fetch(PDO::FETCH_NUM);
+                $boxRadius = 100;
+                foreach ($rings as $ringId) {
+                    $ring = new Ring();
+                    $ring->buildFromId($ringId);
+                    $ringMembers = array_slice($ring->getMemberIds(), 0, 5);
 
-                    /*
-                     * Trigonometric functions for the image locations where `radius` is the radius of the bounding box
-                     *
-                     * top:     radius - (radius - imgRadius)sin(theta)
-                     * left:    radius + (radius - imgRadius)cos(theta)
-                     */
+                    echo    "<div class='col-sm-6 col-md-4 col-lg-3 ring-box'>"
+                        .       "<div class='panel inner-box'>"
+                        .       "<a class='img-ring btn' href='manageRing.php?ring=$ringId'>"
+                        .           "<p class='h1'>".$ring->getMemberCount()."</p>";
 
-                    echo    "<a class='col-md-3 btn ring-box' href='manageRing.php?ring=$ringId'>"
-                        .       "<div class='img-ring'>"
-//                        .           "<div id='outerCircle'></div>"
-//                        .           "<div id='innerCircle'></div>"
-                        .           "<p class='h1'>$results[1]</p>"
-                        .           "<img class='img-circle' src='images/debug/natalie1.jpg' style='top:32.0px; left:100.0px;'>"
-                        .           "<img class='img-circle' src='images/debug/natalie2.jpg' style='top:79.0px; left:35.3px;'>"
-                        .           "<img class='img-circle' src='images/debug/natalie3.jpg' style='top:155.0px; left:60.0px;'>"
-                        .           "<img class='img-circle' src='images/debug/natalie4.jpg' style='top:155.0px; left:140.0px;'>"
-                        .           "<img class='img-circle' src='images/debug/natalie5.jpg' style='top:79.0px; left:164.7px;'>"
+                    // Trigonometric functions for the image locations where `radius` is the radius of the bounding box
+                    // top:     radius - (radius - imgRadius)sin(theta)
+                    // left:    radius + (radius - imgRadius)cos(theta)
+                    $interval = 2*M_PI/count($ringMembers);
+                    $theta = M_PI_2;
+                    foreach ($ringMembers as $member) {
+                        $memberProfile = $friendProfiles[$member];
+                        $top  = $boxRadius - ($boxRadius - 32) * sin($theta);
+                        $left = $boxRadius + ($boxRadius - 32) * cos($theta);
+                        $src = $config->getProfileImgUrl($member, $memberProfile['image']);
+                        echo        "<img class='img-circle' src='$src' title='".$memberProfile['name']."' style='top:".$top."px; left:".$left."px;'>";
+                        $theta += $interval;
+                    }
+
+                    echo        "</a>"
+                        .       "<p class='ring-label'>".$ring->getName()."</p>"
                         .       "</div>"
-                        .       "<p>$results[0]</p>"
-                        .   "</a>";
+                        .   "</div>";
                 }
                 ?>
+                <!-- Create New Ring -->
+                <div id="createRingBox" class="col-sm-6 col-md-4 col-lg-3 ring-box">
+                    <div class="panel inner-box">
+                        <button class="img-ring btn" onclick="createRing()">
+                            <i class="big-plus fa fa-plus"></i>
+                        </button>
+                        <p class="ring-label">Add New Ring</p>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -115,6 +130,6 @@ $spanningRing = array_shift($rings);
     <!-- Get them scripts. Load them last to improve page loading speeds. -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
     <script src="//netdna.bootstrapcdn.com/bootstrap/3.0.0/js/bootstrap.min.js"></script>
-    <!--<script src="js/viewRings.js"></script>-->
+    <script src="js/viewRings.js"></script>
 </body>
 </html>
