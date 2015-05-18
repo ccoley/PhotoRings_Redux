@@ -27,7 +27,7 @@ class UserAuth {
 
     // Password encryption
     var $encrypt = true;    // set to true to use SHA-256 encryption for the password
-    var $hashSalt = 'z+9Ee>;nST0YtP^)I0%6<EeZ!tQ|/*eaB7!?Q%HwwCNSgUL;DRHb]9|MkM{c+N@8';
+    var $hashSalt = '!!ChangeMe';
 
     /**
      * Attempt to log in the user with the provided username and password.
